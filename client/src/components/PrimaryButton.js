@@ -9,14 +9,14 @@ const PrimaryButton = styled.button`
     padding-inline: var(--btn-p-inline,1em);
     font-size: var(--btn-f-size,1.2rem);
     cursor: pointer;
-    transition: filter .3s;
+    transition: background-color .3s;
     letter-spacing: 1px;
     text-transform: uppercase;
     font-family:inherit;
     font-weight: 600;
     padding-top: calc(var(--btn-p-block,.5em) + 3px);
     :hover{
-        filter: brightness(.9);
+        background-color: var(--primaryHover);
     }
 `
 

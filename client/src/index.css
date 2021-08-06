@@ -7,10 +7,12 @@
 :root{
   --primary: #258FF1;
   --onPrimary: #fafafa;
-  --border-radius: 9px;
+  --border-radius: 5px;
   --bg: #fafafa;
   --text-color: #000;
   --text-second: #505050;
+  --primary50: #258ef180;
+  --primaryHover: #258ef1e0;
   /* --bg: #202020;
   --text-color: #fafafa;
   --text-second: #afafaf; */
@@ -30,3 +32,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
