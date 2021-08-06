@@ -2,15 +2,23 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import Input from './Input'
 import PrimaryButton from './PrimaryButton'
+import {switchLogin} from '../features/appSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Form() {
 
-    const [isLogin, setIsLogin] = useState(true)
+    const isLogin = useSelector(state => state.app.login)
+    const dispatch = useDispatch()
     const [formData, setFormData] = useState({name:'',password:'',email:''})
 
     const handleInput = e =>{
         setFormData({...formData,[e.target.name]:e.target.value})
     }
+
+    const handleSignupClick = ()=>{
+        dispatch(switchLogin())
+    }
+
     return (
         <StyledForm onSubmit={ ()=>{} }>
             <h1>{isLogin?"Login":"Register"}</h1>
@@ -20,9 +28,9 @@ export default function Form() {
                 <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInput}/>
             </InputContainer>
 
-            <PrimaryButton style={{'font-size':'.9em','--btn-p-block':'.7em'}}>Sign {isLogin?'in':'up'}</PrimaryButton>
+            <PrimaryButton style={{fontSize:'.9em','--btn-p-block':'.7em'}}>Sign {isLogin?'in':'up'}</PrimaryButton>
             <Link>Forgot password?</Link>
-            <StyledP>{isLogin?'Not':'Already'} member? <Link onClick={()=>setIsLogin(l=>!l)}>Sign {!isLogin?'in':'up'}</Link></StyledP>
+            <StyledP>{isLogin?'Not':'Already'} member? <Link onClick={handleSignupClick}>Sign {!isLogin?'in':'up'}</Link></StyledP>
         </StyledForm>
     )
 }

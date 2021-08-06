@@ -1,11 +1,19 @@
 import styled from 'styled-components'
 import { ReactComponent as BackIcon } from '../imgs/back-arrow.svg'
+import { useSelector, useDispatch } from 'react-redux'
+import { dismissDialog } from '../features/appSlice'
 
+export default function Modal({children}) {
 
-export default function Modal({open,children,onClose}) {
-    const dialogStyle = {'transform':`translateX(${open?'0':'100%'})`}
-    const overlayStyle = open?{}:{'opacity':'0','pointer-events':'none'}
+    const dispatch = useDispatch()
+    const open = useSelector(state => state.app.dialogOpen)
 
+    const dialogStyle = {transform:`translateX(${open?'0':'100%'})`}
+    const overlayStyle = open?{}:{opacity:'0',pointerEvents:'none'}
+
+    const onClose = ()=>{
+        dispatch(dismissDialog())
+    }
     return (
         <Container style={overlayStyle} >
             <StyledOverlay onClick={onClose}/>
@@ -40,7 +48,7 @@ const StyledDialog = styled.div`
     right:0;
     height: 100%;
     background-color: var(--bg);
-    width: 500px;
+    width: min(500px,100vw);
     transition: transform .4s;
     overflow-y:auto;
 `

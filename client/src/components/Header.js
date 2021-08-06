@@ -1,15 +1,19 @@
-import styled, {css} from 'styled-components'
+import styled from 'styled-components'
 import Logo from './Logo'
 import PrimaryButton from './PrimaryButton'
-
+import { useDispatch } from 'react-redux'
+import { showDialog } from '../features/appSlice'
 
 export default function Header() {
+
+    const dispatch = useDispatch()
+
     return (
         <StyledNav>
-            <Logo/>
+            <Logo home/>
             <ButtonsContainer>
-                <StyledButton>Log in</StyledButton>
-                <PrimaryButton style={{'--btn-f-size':'1rem'}}>Sign up</PrimaryButton>
+                <StyledButton onClick={()=>dispatch(showDialog(true))}>Log in</StyledButton>
+                <PrimaryButton style={{'--btn-f-size':'1rem'}} onClick={()=>dispatch(showDialog(false))}>Sign up</PrimaryButton>
             </ButtonsContainer>
         </StyledNav>
     )
