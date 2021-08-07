@@ -19,8 +19,12 @@ export default function Form() {
         dispatch(switchLogin())
     }
 
+    const handleSubmit = e=>{
+        e.preventDefault()
+    }
+
     return (
-        <StyledForm onSubmit={ ()=>{} }>
+        <StyledForm onSubmit={ handleSubmit}>
             <h1>{isLogin?"Login":"Register"}</h1>
             <InputContainer>
                 {!isLogin && <Input type="name" name="name" placeholder="Name" value={formData.name} onChange={handleInput}/>}
@@ -29,7 +33,7 @@ export default function Form() {
             </InputContainer>
 
             <PrimaryButton style={{fontSize:'.9em','--btn-p-block':'.7em'}}>Sign {isLogin?'in':'up'}</PrimaryButton>
-            <Link>Forgot password?</Link>
+            {isLogin && <Link>Forgot password?</Link>}
             <StyledP>{isLogin?'Not':'Already'} member? <Link onClick={handleSignupClick}>Sign {!isLogin?'in':'up'}</Link></StyledP>
         </StyledForm>
     )

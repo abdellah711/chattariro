@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { ReactComponent as Image } from '../imgs/main_image.svg'
 import { ReactComponent as HeartIcon } from '../imgs/heart.svg'
-import Logo from './Logo'
-import PrimaryButton from './PrimaryButton'
+import Logo from '../components/Logo'
+import PrimaryButton from '../components/PrimaryButton'
 import { useDispatch } from 'react-redux'
 import { showDialog } from '../features/appSlice'
 

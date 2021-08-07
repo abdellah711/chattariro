@@ -50,7 +50,6 @@ const StyledDialog = styled.div`
     background-color: var(--bg);
     width: min(500px,100vw);
     transition: transform .4s;
-    overflow-y:auto;
 `
 
 const StyledBar = styled.div`

@@ -1,9 +1,10 @@
 import styled from 'styled-components'
+import {Link as Anchor} from 'react-router-dom'
 
 
 export default function Logo({home}) {
     return home?(
-        <Link href="/">
+        <Link to="/">
             <StyledH1>
                 Chat<span>Tariro</span>
             </StyledH1>
@@ -24,7 +25,7 @@ const StyledH1 = styled.h1`
         color: var(--primary);
     }
 `
-const Link = styled.a`
+const Link = styled(Anchor)`
     text-decoration:none;
     color:inherit;
 `
