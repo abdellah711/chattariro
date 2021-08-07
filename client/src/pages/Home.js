@@ -3,11 +3,9 @@ import { ReactComponent as Image } from '../imgs/main_image.svg'
 import { ReactComponent as HeartIcon } from '../imgs/heart.svg'
 import Logo from '../components/Logo'
 import PrimaryButton from '../components/PrimaryButton'
-import { useDispatch } from 'react-redux'
-import { showDialog } from '../features/appSlice'
 
-export default function Home() {
-    const dispatch = useDispatch()
+export default function Home({history}) {
+
     return (
         <StyledSection>
             <StyledContainer>
@@ -16,7 +14,7 @@ export default function Home() {
                         <Logo/>
                         <p>Stay connected with people you love.</p>
                     </DescriptionContainer>
-                    <PrimaryButton onClick={()=>dispatch(showDialog(false))}>
+                    <PrimaryButton onClick={()=>history.push('/signup')}>
                         Let's Go
                     </PrimaryButton>
                 </StyledMainContainer>

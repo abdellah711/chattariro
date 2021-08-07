@@ -3,8 +3,10 @@ import Logo from './Logo'
 import PrimaryButton from './PrimaryButton'
 import { useDispatch } from 'react-redux'
 import { showDialog } from '../features/appSlice'
-
+import { useHistory } from 'react-router-dom'
 export default function Header() {
+    
+    const history = useHistory()
 
     const dispatch = useDispatch()
 
@@ -12,8 +14,8 @@ export default function Header() {
         <StyledNav>
             <Logo home/>
             <ButtonsContainer>
-                <StyledButton onClick={()=>dispatch(showDialog(true))}>Log in</StyledButton>
-                <PrimaryButton style={{'--btn-f-size':'1rem'}} onClick={()=>dispatch(showDialog(false))}>Sign up</PrimaryButton>
+                <StyledButton onClick={()=>history.push('/login')}>Log in</StyledButton>
+                <PrimaryButton style={{'--btn-f-size':'1rem'}} onClick={()=>history.push('/signup')}>Sign up</PrimaryButton>
             </ButtonsContainer>
         </StyledNav>
     )

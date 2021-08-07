@@ -13,12 +13,14 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route exact path="/" component={Home} />
           <Route path="/c" component={Converations}/>
+          <Route path="/" component={Home} />
         </Switch>
 
         <Modal>
-          <Form />
+          <Switch>
+            <Route path={["/login","/signup"]} component={Form}/>
+          </Switch>
         </Modal>
       </Router>
     </div>

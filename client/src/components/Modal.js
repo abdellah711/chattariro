@@ -1,18 +1,18 @@
 import styled from 'styled-components'
 import { ReactComponent as BackIcon } from '../imgs/back-arrow.svg'
-import { useSelector, useDispatch } from 'react-redux'
-import { dismissDialog } from '../features/appSlice'
+import { useHistory, useLocation } from 'react-router-dom'
 
 export default function Modal({children}) {
 
-    const dispatch = useDispatch()
-    const open = useSelector(state => state.app.dialogOpen)
+    const history = useHistory()
+    const location = useLocation()
+    const open = ['/login','/signup'].includes(location.pathname)
 
     const dialogStyle = {transform:`translateX(${open?'0':'100%'})`}
     const overlayStyle = open?{}:{opacity:'0',pointerEvents:'none'}
 
     const onClose = ()=>{
-        dispatch(dismissDialog())
+        history.goBack()
     }
     return (
         <Container style={overlayStyle} >
@@ -50,6 +50,7 @@ const StyledDialog = styled.div`
     background-color: var(--bg);
     width: min(500px,100vw);
     transition: transform .4s;
+    overflow-y:auto;
 `
 
 const StyledBar = styled.div`
