@@ -16,12 +16,11 @@ export const signin = async (req,res,next) =>{
     const isCorrect = await bcrypt.compare(password,user.password)
 
     if(!isCorrect) return res.status(403).json({success:false,field:'password',message:'Wrong Password!'})
-
-    const token = jwt.sign({
-        id:user._id,
-        user: user.name
-    },KEY)
-    res.status(200).json({success:true,token})
+    
+    const data = {id:user._id,user: user.name}
+    
+    const token = jwt.sign(data,KEY)
+    res.status(200).json({success:true,token,data})
 }
 
 export const signup = async (req,res,next) =>{
@@ -38,12 +37,8 @@ export const signup = async (req,res,next) =>{
     const user = await User.create({name,email,password:pwd}).catch(next)
 
     //returning token
-    const token = jwt.sign({
-        id:user._id,
-        user:user.name
-    },KEY)
-    res.status(200).json({
-        success:true,
-        token
-    })
+    const data = {id:user._id,user: user.name}
+    
+    const token = jwt.sign(data,KEY)
+    res.status(200).json({success:true,token,data})
 }

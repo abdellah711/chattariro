@@ -17,16 +17,18 @@ const StyledLabel = styled.label`
     gap: 7px;
     font-size: 1.05rem;
     input{
-        padding: .6em .5em;
+        padding: .5em .6em;
         font-size: 1.1em;
         border: 1px solid rgba(100,100,100,.5);
         border-radius: var(--border-radius);
         background-color: transparent;
         font-family:inherit;
+        color: inherit;
     }
     
     span{
         color: red;
+        font-size: .9em;
     }
 
     input:focus {
@@ -36,8 +38,8 @@ const StyledLabel = styled.label`
     }
 
     input.error{
-        box-shadow:0 0 3pt 2pt rgba(200,0,0,.2);
-        border-color: red;
+        box-shadow:0 0 3pt 2pt var(--error-color20);
+        border-color: var(--error-color);
 
     }
 `

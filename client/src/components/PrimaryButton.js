@@ -18,6 +18,9 @@ const PrimaryButton = styled.button`
     :hover{
         background-color: var(--primaryHover);
     }
+    :disabled{
+        background-color: rgba(100,100,100,.5);
+    }
 `
 
 export default PrimaryButton;

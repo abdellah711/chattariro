@@ -13,9 +13,14 @@
   --text-second: #505050;
   --primary50: #258ef180;
   --primaryHover: #258ef1e0;
+  --error-color: #fa2020;
+  --error-color20: #fa202041;
   /* --bg: #202020;
   --text-color: #fafafa;
-  --text-second: #afafaf; */
+  --text-second: #afafaf; 
+  --error-color: #fa2020c9;
+  --error-color20: #fa20201f; */
+ 
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
