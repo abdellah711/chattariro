@@ -1,21 +1,27 @@
 import styled from 'styled-components'
 import Logo from './Logo'
 import PrimaryButton from './PrimaryButton'
-import { useDispatch } from 'react-redux'
-import { showDialog } from '../features/appSlice'
 import { useHistory } from 'react-router-dom'
+import {useSelector} from 'react-redux'
+import Avatar from './Avatar'
+
 export default function Header() {
     
     const history = useHistory()
-
-    const dispatch = useDispatch()
+    const {user} = useSelector(state => state.app)
 
     return (
         <StyledNav>
             <Logo home/>
             <ButtonsContainer>
-                <StyledButton onClick={()=>history.push('/login')}>Log in</StyledButton>
-                <PrimaryButton style={{'--btn-f-size':'1rem'}} onClick={()=>history.push('/signup')}>Sign up</PrimaryButton>
+                {   user?
+                    <Avatar name={user} to={{hash:"#profile",state:{openModal:true}}}/>
+                :
+                    <>
+                        <StyledButton onClick={()=>history.push({pathname:'/login',state:{openModal:true}})}>Log in</StyledButton>
+                        <PrimaryButton style={{'--btn-f-size':'1rem'}} onClick={()=>history.push({pathname:'/signup',state:{openModal:true}})}>Sign up</PrimaryButton>
+                    </>
+                }
             </ButtonsContainer>
         </StyledNav>
     )

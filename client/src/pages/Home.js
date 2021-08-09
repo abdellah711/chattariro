@@ -3,8 +3,11 @@ import { ReactComponent as Image } from '../imgs/main_image.svg'
 import { ReactComponent as HeartIcon } from '../imgs/heart.svg'
 import Logo from '../components/Logo'
 import PrimaryButton from '../components/PrimaryButton'
+import { useHistory } from 'react-router-dom'
 
-export default function Home({history}) {
+export default function Home() {
+    
+    const history = useHistory()
 
     return (
         <StyledSection>
@@ -14,7 +17,7 @@ export default function Home({history}) {
                         <Logo/>
                         <p>Stay connected with people you love.</p>
                     </DescriptionContainer>
-                    <PrimaryButton onClick={()=>history.push('/signup')}>
+                    <PrimaryButton onClick={()=>history.push({pathname:'/signup',state:{openModal:true}})}>
                         Let's Go
                     </PrimaryButton>
                 </StyledMainContainer>

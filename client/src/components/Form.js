@@ -16,7 +16,7 @@ export default function Form(props) {
     const [errors, setErrors] = useState({})
 
     const [authenticate,{isLoading,data,error,isError,isSuccess}] = useAuthMutation()
-
+    
     useEffect(() => {
         if(isSuccess && data){
             dispatch(setUser({token:data.token,...data.data}))
@@ -51,8 +51,8 @@ export default function Form(props) {
                 <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInput}  error={errors.password}/>
             </InputContainer>
             
-            {isLoading && <Progress style={{alignSelf:'center'}}/>}
-
+            {isLoading && <Progress style={{alignSelf:'center',flexShrink:0}}/>}
+            
             <PrimaryButton style={{fontSize:'.9em','--btn-p-block':'.7em'}} disabled={Object.values(errors).length>0}>Sign {isLogin?'in':'up'}</PrimaryButton>
             {errors.none && <StyledError>{errors.none}</StyledError>}
             {isLogin && <Link to="forget">Forgot password?</Link>}

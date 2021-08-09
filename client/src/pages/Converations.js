@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 
 export default function Converations() {
     return (
@@ -6,3 +7,4 @@ export default function Converations() {
         </div>
     )
 }
+

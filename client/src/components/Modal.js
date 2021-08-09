@@ -6,7 +6,7 @@ export default function Modal({children}) {
 
     const history = useHistory()
     const location = useLocation()
-    const open = ['/login','/signup'].includes(location.pathname)
+    const open = location.state?.openModal || ['/login','/signup'].includes(location.pathname)
 
     const dialogStyle = {transform:`translateX(${open?'0':'100%'})`}
     const overlayStyle = open?{}:{opacity:'0',pointerEvents:'none'}

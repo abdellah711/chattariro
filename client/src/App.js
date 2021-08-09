@@ -3,9 +3,10 @@ import Form from './components/Form';
 import Header from './components/Header';
 import Home from './pages/Home';
 import Modal from './components/Modal';
-import { BrowserRouter as Router, Switch, Route ,useHistory, Redirect} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Converations from './pages/Converations';
 import { useSelector} from 'react-redux'
+import Profile from './components/Profile';
 
 function App() {
 
@@ -20,7 +21,7 @@ function App() {
           <Route path="/c">
             {!token ? <Redirect to="/"/> :<Converations/>}
           </Route>
-          <Route path="/" >
+          <Route exact path={["/","/signup","/login"]} >
             {token ? <Redirect to="c"/> :<Home/>}
           </Route>
         </Switch>
@@ -28,6 +29,7 @@ function App() {
         <Modal>
           <Switch>
             <Route path={["/login","/signup"]} component={Form}/>
+            <Route path="*" component={Profile}/>
           </Switch>
         </Modal>
       </Router>

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 const KEY = process.env.KEY||'1234569'
 
 export default function (req,res,next){
-    const token = req.headers.authencation?.split(' ')[1]
+    const token = req.headers.authorization?.split(' ')[1]
     
     if(!token) return res.status(401).json({success:false,message:'Unauthorized'})
 
