@@ -4,14 +4,14 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import Modal from './components/Modal';
 import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
-import Converations from './pages/Converations';
+import Dashboard from './pages/Dashboard';
 import { useSelector} from 'react-redux'
 import Profile from './components/Profile';
 
 function App() {
 
   const token = useSelector(state => state.app.token)
-
+  
   return (
     <div className="App">
       <Router>
@@ -19,7 +19,7 @@ function App() {
         <Switch>
           
           <Route path="/c">
-            {!token ? <Redirect to="/"/> :<Converations/>}
+            {!token ? <Redirect to="/"/> :<Dashboard/>}
           </Route>
           <Route exact path={["/","/signup","/login"]} >
             {token ? <Redirect to="c"/> :<Home/>}

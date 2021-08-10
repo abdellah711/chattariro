@@ -9,18 +9,21 @@
   --onPrimary: #fafafa;
   --border-radius: 5px;
   --bg: #fafafa;
-  --text-color: #000;
+  --bg-card: #f0f0f0;
+  --text-color: rgba(0, 0, 0, 0.863);
   --text-second: #505050;
   --primary50: #258ef180;
+  --primary20: #258ef142;
   --primaryHover: #258ef1e0;
   --error-color: #fa2020;
   --error-color20: #fa202041;
   /* --bg: #202020;
+  --bg-card: #353535;
   --text-color: #fafafa;
   --text-second: #afafaf; 
   --error-color: #fa2020c9;
   --error-color20: #fa20201f; */
- 
+  
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
