@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="71" height="71" viewBox="0 0 71 71" fill="none">
+<rect x="31" width="8" height="71" rx="3" fill="var(--onPrimary)"/>
+<rect y="40" width="8" height="71" rx="3" transform="rotate(-90 0 40)" fill="var(--onPrimary)"/>
+</svg>

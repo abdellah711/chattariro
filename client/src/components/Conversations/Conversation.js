@@ -6,22 +6,23 @@ import {Link} from 'react-router-dom'
 const Conversation = ({selected,item,onClick,uId}) =>{
 
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}
-    const sender = item.last_msg.sender === uId? 'you':item.users.find(u=>u._id===uId).name
+    const sender = item.last_msg.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
     const name = item.is_grp?
                     item.grp_name?item.grp_name:item.users.map(u=>u.name).join(' ')
                     :item.users.find(u=>u._id!==uId).name
-    const readStyle =  {'--weight':item.last_msg.read[uId]?'lighter':'bold'}
+    const read = item.last_msg.read.find(r=>r===uId)!==-1
+    const readStyle =  {'--weight':read?'lighter':'bold'}
     const img = item.is_grp?item.img:item.users.find(u=>u._id).img
 
     
     return (
-        <StyledConversation style={style} onClick={onClick} to={`/c/${item.conv_id}`}>
+        <StyledConversation style={style} onClick={onClick} to={`/c/${item._id}`}>
             <Avatar name={name} src={img} style={{'--size':'3.5rem'}}/>
             <div className="conv_data">
                 <StyledName>{name}</StyledName>
-                <StyledMsg style={readStyle}><span>{sender}: </span>{item.last_msg.msg} </StyledMsg>
+                <StyledMsg style={readStyle}><span>{sender}: </span>{item.last_msg.content} </StyledMsg>
             </div>
-            <StyledTime>{item.last_msg.time}</StyledTime>
+            <StyledTime>{new Date(item.last_msg.createdAt).toDateString()}</StyledTime>
         </StyledConversation>
     )
 }

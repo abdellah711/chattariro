@@ -17,12 +17,14 @@
   --primaryHover: #258ef1e0;
   --error-color: #fa2020;
   --error-color20: #fa202041;
+  --shadow:5px 5px 9px #00000028;
   /* --bg: #202020;
   --bg-card: #353535;
   --text-color: #fafafa;
   --text-second: #afafaf; 
   --error-color: #fa2020c9;
-  --error-color20: #fa20201f; */
+  --error-color20: #fa20201f;
+  --shadow:none; */
   
 }
 

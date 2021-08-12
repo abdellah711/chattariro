@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import userRoute from './routes/user.js'
+import convRouter from './routes/conversation.js'
 import cors from 'cors'
 
 const PORT = process.env.PORT||5000
@@ -14,11 +15,14 @@ app.use(cors())
 
 mongoose.connect(URL,{
     useNewUrlParser:true,
-    useUnifiedTopology:true
+    useUnifiedTopology:true,
+    useCreateIndex:true
 })
     .then(()=>console.log('db connected successfully'))
     .catch(()=>console.log('db failed to connect'))
 
 app.use('/user',userRoute)
+app.use('/conversations',convRouter)
+
 
 app.listen(PORT,()=>console.log(`server listening on port ${PORT}`))

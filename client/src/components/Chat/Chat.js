@@ -10,5 +10,9 @@ export default function Chat() {
 
 const StyledContainer = styled.div`
     flex:2;
+    height:100%;
+    background-color:var(--bg-card);
+    border-radius:var(--border-radius);
+
     /* border: 1px solid rgba(100,100,100,.3); */
 `
