@@ -33,6 +33,7 @@ const StyledNav = styled.nav`
     align-items: center;
     padding-inline: calc(5% - 7px);
     padding-block: .5rem;
+    height: 5rem;
 `
 const ButtonsContainer = styled.div`
     display: flex;

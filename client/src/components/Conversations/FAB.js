@@ -31,5 +31,5 @@ const StyledFab = styled.div`
     justify-content: center;
     padding:.83rem;
     box-shadow: 4px 4px 12px rgba(0,0,0,.4);
-    margin:12px;
+    margin:20px;
 `

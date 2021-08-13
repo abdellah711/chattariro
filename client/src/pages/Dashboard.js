@@ -20,5 +20,7 @@ export default function Dashboard() {
 
 const StyledContainer = styled.div`
     display:flex;
-    flex:1;
+    /* flex:1; */
+    height:calc(100% - 5rem);
+    
 `

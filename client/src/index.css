@@ -17,14 +17,18 @@
   --primaryHover: #258ef1e0;
   --error-color: #fa2020;
   --error-color20: #fa202041;
-  --shadow:5px 5px 9px #00000028;
+  --shadow:5px 12px 9px #00000028;
+  --input-bg:#fff;
+  --input-ph: rgb(190, 190, 190);
   /* --bg: #202020;
   --bg-card: #353535;
   --text-color: #fafafa;
   --text-second: #afafaf; 
   --error-color: #fa2020c9;
   --error-color20: #fa20201f;
-  --shadow:none; */
+  --shadow:none;
+  --input-bg:rgb(43, 43, 43);
+  --input-ph: rgb(80, 80, 80); */
   
 }
 

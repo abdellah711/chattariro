@@ -14,6 +14,7 @@ const containerCss = css`
     align-items: center;
     text-decoration: none;
     justify-content:center;
+    flex-shrink:0;
 `
 
 export default function Avatar({src,name,to,style}) {
