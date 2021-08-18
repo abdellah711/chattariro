@@ -1,20 +1,39 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Conversation from './Conversation'
-import { useGetConversationsQuery } from '../../features/conversationApi'
 import Progress from '../Progress'
 import FAB from './FAB'
+import {useSocketContext} from '../../context/socket-context'
+import { useDispatch, useSelector } from 'react-redux'
+import { setConversations } from '../../features/appSlice'
+import { useLocation } from 'react-router-dom'
 
 export default function Conversations() {
     
-    const {data,isLoading,error} = useGetConversationsQuery()
-    console.log(error)
-    const [selected, setSelected] = useState(-1)
-    console.log(data)
-    const conversations = data?.data?.map((item,i)=><Conversation key={item._id} uId="j9r0ejf09j3" item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
+    const location = useLocation()
+    const conv_id = location.pathname.split('/')[2]
+    const [selected, setSelected] = useState(conv_id??-1)
+    const socket = useSocketContext()
+    const dispatch = useDispatch()
+    const [data,userId] = useSelector(state => [state.app.conversations,state.app.user.id])
+    useEffect(()=>{
+        socket.emit('conversation:list',res=>{
+            if(res.success){
+                dispatch(setConversations(res.data))
+            }else{
+                
+            }
+        })
+    },[])
+    const conversations = data?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
     return (
         <StyledContainer>
-            {isLoading?<ProgressContainer><Progress/></ProgressContainer>:conversations}
+            {!data?
+            <ProgressContainer><Progress/></ProgressContainer>
+            :data.length?
+            conversations
+            :<StyledEmpty>No Conversation</StyledEmpty> //todo design empty view
+        }
             <FAB/>
         </StyledContainer>
     )
@@ -38,4 +57,12 @@ const ProgressContainer = styled.div`
     display:flex;
     align-items: center;
     justify-content: center;
+`
+const StyledEmpty = styled.div`
+    justify-content: center;
+    height:100%;
+    display:flex;
+    align-items: center;
+    font-size:1.1rem;
+    user-select:none;
 `

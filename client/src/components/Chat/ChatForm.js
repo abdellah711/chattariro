@@ -1,14 +1,32 @@
 import styled from 'styled-components'
 import {ReactComponent as SendIcon} from '../../imgs/send.svg'
+import { useSocketContext } from '../../context/socket-context'
+import { useDispatch } from 'react-redux'
+import {useState} from 'react';
+import { receiveMessage } from '../../features/appSlice';
 
-const handleSend = e=>{
-    e.preventDefault()
-}
 
-export default function ChatForm() {
+export default function ChatForm({conv_id}) {
+
+    const socket = useSocketContext()
+    const [value, setValue] = useState('')
+    const dispatch = useDispatch()
+    const handleSend = e=>{
+        e.preventDefault()
+        const msg = {
+            content:value,
+            conv_id
+        }
+        console.log('sending message:',msg)
+        socket.emit('messages:create',msg,res=>{
+            dispatch(receiveMessage(res.data))
+        })
+        setValue('')
+    }
+
     return (
         <StyledForm onSubmit={handleSend}>
-            <StyledInput placeholder="Enter your message ..."/>
+            <StyledInput placeholder="Enter your message ..." value={value} onChange={e=>setValue(e.target.value)}/>
             <StyledButton><SendIcon/></StyledButton>
         </StyledForm>
     )

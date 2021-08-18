@@ -4,15 +4,15 @@ import {Link} from 'react-router-dom'
 
 
 const Conversation = ({selected,item,onClick,uId}) =>{
-
+    console.log('item',item)
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}
     const sender = item.last_msg.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
     const name = item.is_grp?
                     item.grp_name?item.grp_name:item.users.map(u=>u.name).join(' ')
-                    :item.users.find(u=>u._id!==uId).name
+                    :item.users.find(u=>u._id!==uId)?.name
     const read = item.last_msg.read.find(r=>r===uId)!==-1
     const readStyle =  {'--weight':read?'lighter':'bold'}
-    const img = item.is_grp?item.img:item.users.find(u=>u._id).img
+    const img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
 
     
     return (

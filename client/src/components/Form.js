@@ -19,7 +19,7 @@ export default function Form(props) {
     
     useEffect(() => {
         if(isSuccess && data){
-            dispatch(setUser({token:data.token,...data.data}))
+            dispatch(setUser({user:{token:data.token,...data.data}}))
             return
         }
         if(isError && error){
@@ -29,7 +29,7 @@ export default function Form(props) {
             }
             setErrors({none:"Please check your internet connection!"})
         }
-    }, [data,error])
+    }, [data,error,dispatch])
     
 
     const handleInput = e =>{
@@ -53,7 +53,7 @@ export default function Form(props) {
             
             {isLoading && <Progress style={{alignSelf:'center',flexShrink:0}}/>}
             
-            <PrimaryButton style={{fontSize:'.9em','--btn-p-block':'.7em'}} disabled={Object.values(errors).length>0}>Sign {isLogin?'in':'up'}</PrimaryButton>
+            <PrimaryButton style={{fontSize:'.9em','--btn-p-block':'.7em'}} disabled={Object.values(errors).length>0 && !errors.none}>Sign {isLogin?'in':'up'}</PrimaryButton>
             {errors.none && <StyledError>{errors.none}</StyledError>}
             {isLogin && <Link to="forget">Forgot password?</Link>}
             <StyledP>{isLogin?'Not':'Already'} member? <Link to={isLogin?'/signup':'/login'}>Sign {!isLogin?'in':'up'}</Link></StyledP>

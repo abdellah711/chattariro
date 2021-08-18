@@ -19,18 +19,19 @@ const containerCss = css`
 
 export default function Avatar({src,name,to,style}) {
 
-    const StyledContainer = to ?styled(Link)`${containerCss}`: styled.div`${containerCss}`
+    const StyledContainer = to ?StyledLink: StyledWrapper
 
     return (
         <StyledContainer to={to} style={style}>
            {src? <StyledImg src={src} />
-           : <StyledChar>{name[0].toUpperCase()}</StyledChar>
+           : <StyledChar>{name&&name[0]?.toUpperCase()}</StyledChar>
            } 
         </StyledContainer>
     )
 }
 
-
+const StyledLink = styled(Link)`${containerCss}`
+const StyledWrapper = styled.div`${containerCss}`
 
 const StyledChar = styled.h1`
     user-select:none;

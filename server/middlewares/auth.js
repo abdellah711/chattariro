@@ -16,3 +16,16 @@ export default function (req,res,next){
     
     next()
 }
+
+export const authIO = (socket,next)=>{
+    const token = socket.handshake.auth.token
+    if(!token) return next(new Error('Unauthorized'))
+
+    if(!jwt.verify(token,KEY)) return next(new Error('Invalid Token'))
+
+    const {user,id} = jwt.decode(token)
+
+    socket.user = {id,name:user}
+    
+    next()
+}

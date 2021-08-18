@@ -1,17 +1,34 @@
 import styled from 'styled-components'
-import {useCreateConversationMutation} from '../../features/conversationApi'
-import {ReactComponent as PlusIcon } from '../../imgs/plus.svg'
+import { useCreateConversationMutation } from '../../features/conversationApi'
+import { ReactComponent as PlusIcon } from '../../imgs/plus.svg'
+import { createConversation } from '../../features/appSlice'
+import { useDispatch } from 'react-redux'
+import { useSocketContext } from '../../context/socket-context'
+
 
 export default function FAB() {
-    const [create,{data,isLoading,error}] = useCreateConversationMutation()
+    const dispatch = useDispatch()
+    const socket = useSocketContext()
 
-    const handleClick = ()=>{
-        create()
+    const handleClick = () => {
+        const newConv = {
+            last_msg: {
+                content: 'alaoui'
+            },
+            users: ['611bd22377d63b0eb861685e']
+        }
+        socket.emit('conversation:create', newConv, res => {
+            if (res.success) {
+                console.log('conversation created successfully')
+                dispatch(createConversation(res.data))
+            }
+        })
+
     }
 
     return (
         <StyledFab onClick={handleClick}>
-            <PlusIcon/>
+            <PlusIcon />
         </StyledFab>
     )
 }

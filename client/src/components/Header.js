@@ -15,7 +15,7 @@ export default function Header() {
             <Logo home/>
             <ButtonsContainer>
                 {   user?
-                    <Avatar name={user} to={{hash:"#profile",state:{openModal:true}}}/>
+                    <Avatar name={user.user} to={{hash:"#profile",state:{openModal:true}}}/>
                 :
                     <>
                         <StyledButton onClick={()=>history.push({pathname:'/login',state:{openModal:true}})}>Log in</StyledButton>
