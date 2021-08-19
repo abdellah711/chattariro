@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 export default function Profile({location,history}) {
     
-    let data = useSelector(state=>state.app)
     
     let isMyProfile = false
     let noProfile = true
@@ -14,14 +13,27 @@ export default function Profile({location,history}) {
         isMyProfile = true
         noProfile = false
     }
-    if(noProfile) return <></>
+    
+    let [data,uId] = useSelector(state => [isMyProfile? state.app.user : state.app.conversations, state.app.user.id])
 
+    if(noProfile) return <></>
+    const conv_id = location.pathname.split('/')[2]
+    if(isMyProfile){
+        data = {...data,name:data.user}
+    }else{
+        data = data?.find(conv => conv._id===conv_id)
+        console.log(data?.users.filter(u=> u._id!==uId))
+        data = {name:data?.users?.filter(u=> u._id!==uId).map(u=>u.name).join(', ')}
+    }
+
+    if(!data) return <></>
+    console.log('profile',data)
     return (
         <ProfileContainer>
-            <Avatar name={data.user} style={{'--size':"9rem",fontSize:"3em"}}/>
+            <Avatar name={data.name} style={{'--size':"9rem",fontSize:"3em"}}/>
             <StyledContainer>
-                <StyledName>Alaoui</StyledName>
-                {isMyProfile && <StyledEmail>alaoui@abdellah.com</StyledEmail>}
+                <StyledName>{data.name}</StyledName>
+                {isMyProfile && <StyledEmail>{data.email}</StyledEmail>}
             </StyledContainer>
             <ActionsContainer>
                 

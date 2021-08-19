@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { useCreateConversationMutation } from '../../features/conversationApi'
 import { ReactComponent as PlusIcon } from '../../imgs/plus.svg'
 import { createConversation } from '../../features/appSlice'
 import { useDispatch } from 'react-redux'

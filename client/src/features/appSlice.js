@@ -17,7 +17,11 @@ const appSlice = createSlice({
             return newState
         },
         setConversations: (state, action) =>{
-            return {...state,conversations:action.payload,isLoadingConversation:false}
+            return {
+                ...state,
+                conversations:action.payload,
+                isLoadingConversation:false,
+            }
             
         },
         createConversation: (state, action) =>{

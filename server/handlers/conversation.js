@@ -30,7 +30,6 @@ export default (io) =>({
         const socket = this
         const {id} = socket.user
         const convs = await Conversation.find({users:ObjectId(id)}).populate('last_msg').populate('users').catch(err=>cb({success:false,message:err.message}))
-        console.log(socket.user)
         //joining conversations
         socket.join([...convs?.map(conv=>conv._id+""),id])
         cb({success:true,data:convs})

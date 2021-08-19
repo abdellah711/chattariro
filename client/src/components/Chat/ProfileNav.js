@@ -3,17 +3,26 @@ import Avatar from '../Avatar'
 import {Link} from 'react-router-dom'
 import { useLocation } from 'react-router'
 import {useMemo} from 'react'
-
+import {useSelector} from 'react-redux'
 
 export default function ProfileNav() {
     
     const location = useLocation()
-    console.log(location.pathname)
+
     const path = useMemo(() => location.pathname+(location.pathname.endsWith('/')?'':'/') + 'profile', [location])
+    const conv_id = path.split('/')[2]
+    const [conversation,uId] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.user.id])
+    
+    if(!conversation) return <></>
+
+    const name = conversation.users.length>2? 
+        conversation.users.map(u=>u.name).join(',')
+        : conversation.users.find(u=>u._id!==uId).name
+
     return (
         <StyledContainer to={path}>
-            <Avatar name="alaoui" style={{gridRow:'1/3'}}/>
-            <StyledName>Alaoui</StyledName>
+            <Avatar name={name} style={{gridRow:'1/3'}}/>
+            <StyledName>{name}</StyledName>
             <StyledStatus>Online</StyledStatus>
         </StyledContainer>
     )
