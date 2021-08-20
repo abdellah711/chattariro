@@ -2,32 +2,33 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     user: JSON.parse(localStorage.getItem('user')),
-    conversations:null,
-    messages:{},
-    isLoadingConversation:true
+    conversations: null,
+    messages: {},
+    isLoadingConversation: true,
+    isDialogShown: false
 }
 
 const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
-        setUser: (state,action) =>{
-            const newState = {...state, ...action.payload}
-            localStorage.setItem('user',JSON.stringify(newState.user))
+        setUser: (state, action) => {
+            const newState = { ...state, ...action.payload }
+            localStorage.setItem('user', JSON.stringify(newState.user))
             return newState
         },
-        setConversations: (state, action) =>{
+        setConversations: (state, action) => {
             return {
                 ...state,
-                conversations:action.payload,
-                isLoadingConversation:false,
+                conversations: action.payload,
+                isLoadingConversation: false,
             }
-            
+
         },
-        createConversation: (state, action) =>{
-            return {...state,conversations:[...state.conversations,action.payload]}
+        createConversation: (state, action) => {
+            return { ...state, conversations: [...state.conversations, action.payload],isDialogShown:false }
         },
-        receiveMessage: (state, action)=>{
+        receiveMessage: (state, action) => {
             const message = action.payload
             const messages = [
                 ...state.messages[message.conv_id],
@@ -35,25 +36,34 @@ const appSlice = createSlice({
             ]
             return {
                 ...state,
-                messages:{
+                messages: {
                     ...state.messages,
                     [message.conv_id]: messages
                 }
             }
         },
-        receiveMessages: (state, action)=>{
+        receiveMessages: (state, action) => {
             const conv_id = action.payload.conv_id
             const messages = action.payload.messages
             return {
                 ...state,
-                messages:{
+                messages: {
                     ...state.messages,
                     [conv_id]: messages
                 }
             }
         },
+        showDialog: (state, action) => {
+            return { ...state, isDialogShown: action.payload }
+        }
     }
 });
 
-export const { setUser,createConversation,setConversations,receiveMessage,receiveMessages } = appSlice.actions
+export const { setUser,
+    createConversation,
+    setConversations,
+    receiveMessage,
+    receiveMessages,
+    showDialog
+} = appSlice.actions
 export default appSlice.reducer

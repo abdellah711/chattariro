@@ -14,7 +14,7 @@ export default function Profile({location,history}) {
         noProfile = false
     }
     
-    let [data,uId] = useSelector(state => [isMyProfile? state.app.user : state.app.conversations, state.app.user.id])
+    let [data,uId] = useSelector(state => [isMyProfile? state.app.user : state.app.conversations, state.app.user?.id])
 
     if(noProfile) return <></>
     const conv_id = location.pathname.split('/')[2]

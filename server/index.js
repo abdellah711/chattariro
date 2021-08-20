@@ -36,7 +36,12 @@ const io = new Server(server,{
     cors:['http://localhost:5000/']
 })
 
-const {createConversation,listConversations,createMessage,listMessages} = handler(io)
+const {createConversation,
+    listConversations,
+    createMessage,
+    listMessages,
+    joinConversation,
+} = handler(io)
 
 io.use(authIO)
 
@@ -45,6 +50,7 @@ io.on('connection',socket=>{
 
     socket.on('conversation:list',listConversations)
     socket.on('conversation:create',createConversation)
+    socket.on('conversation:join',joinConversation)
     socket.on('messages:create',createMessage)
     socket.on('messages:list',listMessages)
 })

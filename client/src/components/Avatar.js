@@ -17,13 +17,13 @@ const containerCss = css`
     flex-shrink:0;
 `
 
-export default function Avatar({src,name,to,style}) {
+export default function Avatar({src,name,to,style,showChar=false}) {
 
     const StyledContainer = to ?StyledLink: StyledWrapper
 
     return (
         <StyledContainer to={to} style={style}>
-           {src? <StyledImg src={src} />
+           {(src && !showChar)? <StyledImg src={src} />
            : <StyledChar>{name&&name[0]?.toUpperCase()}</StyledChar>
            } 
         </StyledContainer>

@@ -6,7 +6,7 @@ import Avatar from '../Avatar'
 export default function MessageList({conv_id}) {
 
     const bottomRef = useRef()
-    const [messages,userId] = useSelector(state => [state.app.messages[conv_id],state.app.user.id])
+    const [messages,userId,users] = useSelector(state => [state.app.messages[conv_id],state.app.user.id,state.app.conversations?.find(c=>c._id===conv_id)?.users])
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -15,7 +15,7 @@ export default function MessageList({conv_id}) {
 
     return (
         <StyledContainer>
-            {messages?.map(message=> <Message key={message._id} message={message} isMe={message.sender ===userId}/>)}
+            {messages?.map(message=> <Message key={message._id} message={message} sender={users?.find(u=>u._id===message.sender)} isMe={message.sender ===userId}/>)}
             <div ref={bottomRef}></div>
         </StyledContainer>
     )
@@ -29,16 +29,34 @@ const StyledContainer = styled.div`
     overflow-y: auto;
 `
 
-const Message = ({message,isMe}) =>{
+const Message = ({message,isMe,sender}) =>{
+    if(message.type === 'event'){
+        return (
+        <StyledEvent>
+            <span>{sender?.name}</span>{`'s ${message.content}`}
+        </StyledEvent>)
+    }
     return (
         <MsgContainer style={isMe? {alignSelf: 'flex-end'}:{}}>
-            {!isMe && <Avatar name={'message.sender.name'} src={message.sender?.img}/>}
+            {!isMe && <Avatar name={sender?.name} src={sender?.img}/>}
             <StyledMessage style={isMe?{}: {backgroundColor:'var(--primary)',color:'var(--onPrimary)'}}>
                 <p>{message.content}</p>
             </StyledMessage>
         </MsgContainer>
     )
 }
+
+const StyledEvent = styled.p`
+    background-color: rgba(100,100,100,.5);
+    align-self: center;
+    max-width: 50%;
+    padding: .3em .5em;
+    border-radius: var(--border-radius);
+
+    &>span{
+        text-transform: capitalize;
+    }
+`
 
 const MsgContainer = styled.div`
     display:flex;

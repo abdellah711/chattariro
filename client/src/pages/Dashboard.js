@@ -5,6 +5,7 @@ import Conversations from '../components/Conversations/Conversations'
 import { useSocketContext } from '../context/socket-context'
 import { useDispatch } from 'react-redux'
 import { receiveMessage,createConversation } from '../features/appSlice'
+import NewConversationDialog from '../components/Conversations/NewConversationDialog'
 
 export default function Dashboard() {
 
@@ -14,11 +15,11 @@ export default function Dashboard() {
 
     useEffect(()=>{
         socket.on('receive-message',(message)=>{
-            console.log('receiveMessage')
             dispatch(receiveMessage(message))
         })
         socket.on('new-conversation',(conversation)=>{
             dispatch(createConversation(conversation))
+            socket.emit('conversation:join',conversation._id)
         })
         return ()=> {
             socket.off('receive-message')
@@ -30,13 +31,13 @@ export default function Dashboard() {
         <StyledContainer>
             <Conversations/>
             <Chat/>
+            <NewConversationDialog/>
         </StyledContainer>
     )
 }
 
 const StyledContainer = styled.div`
     display:flex;
-    /* flex:1; */
     height:calc(100% - 5rem);
     
 `

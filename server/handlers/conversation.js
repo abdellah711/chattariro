@@ -8,11 +8,11 @@ const ObjectId = mongoose.Types.ObjectId
 export default (io) =>({
     createConversation: async function(payload,cb){
         const socket = this
-        const {is_grp,users,last_msg,img} = payload
+        const {is_grp,users,img} = payload
 
-        if(!users || !last_msg) return cb({success:false, message:'Please provide conversation users and last message'})
+        if(!users) return cb({success:false, message:'Please provide conversation members'})
     
-        const msg = await Message.create({...last_msg,sender:ObjectId(socket.user.id)}).catch(err=>cb({success:false,message:err.message}))
+        const msg = await Message.create({sender:ObjectId(socket.user.id),type:"event",content:"started new conversation"}).catch(err=>cb({success:false,message:err.message}))
     
         
         const usersIds = users.map(u=>ObjectId(u))
@@ -24,6 +24,7 @@ export default (io) =>({
         const newMsg = await Message.findByIdAndUpdate(msg._id,{conv_id:conv._id},{new:true})
         conv.last_msg = newMsg
         socket.to(users).emit('new-conversation',conv)
+        socket.join(conv._id)
         cb({success:true,data:conv})
     },
     listConversations: async function(cb){
@@ -45,5 +46,9 @@ export default (io) =>({
    listMessages: async function(conv_id,cb){
         const messages = await Message.find({conv_id}).catch(err=>cb({success:false,message:err.message}))
         cb({success:true,data:messages})
+   },
+   joinConversation: async function(conv_id){
+       const socket = this
+       socket.join(conv_id)
    }
 })

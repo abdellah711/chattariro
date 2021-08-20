@@ -27,15 +27,17 @@ export default function Conversations() {
     },[])
     const conversations = data?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
     return (
-        <StyledContainer>
-            {!data?
-            <ProgressContainer><Progress/></ProgressContainer>
-            :data.length?
-            conversations
-            :<StyledEmpty>No Conversation</StyledEmpty> //todo design empty view
-        }
+        <Wrapper>
+            <StyledContainer>
+                {!data?
+                <ProgressContainer><Progress/></ProgressContainer>
+                :data.length?
+                conversations
+                :<StyledEmpty>No Conversation</StyledEmpty> //todo design empty view
+            }
+            </StyledContainer>
             <FAB/>
-        </StyledContainer>
+        </Wrapper>
     )
 }
 
@@ -44,13 +46,15 @@ const StyledContainer = styled.div`
     flex-direction: column;
     padding: .5em;
     gap: .5em;
+    height:100%;
+    overflow-y:auto;
+    `
+const Wrapper = styled.div`
+    box-shadow: var(--shadow);
+    position:relative;
     flex:1;
     height:100%;
-    position: relative;
-    overflow-y:auto;
-    box-shadow: var(--shadow);
 `
-
 const ProgressContainer = styled.div`
     height:100%;
     width:100%;
