@@ -6,7 +6,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 export const getConversations = async (req,res,next) =>{
     const {id} = req.user
-    const convs = await Conversation.find({users:ObjectId(id)}).populate('last_msg').populate('users').catch(next)
+    const convs = await Conversation.find({users:ObjectId(id)},null,{sort:{updatedAt:1}}).populate('last_msg').populate('users',{password:0}).catch(next)
     res.json({success:true,data:convs})
 }
 

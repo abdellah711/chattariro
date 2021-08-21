@@ -44,6 +44,7 @@ const StyledName = styled.p`
     font-size: 1.1rem;
     font-weight: bold;
     opacity:.98;
+    text-transform: capitalize;
 `
 const StyledStatus = styled.p`
     color: var(--text-second);

@@ -5,6 +5,8 @@ const schema = mongoose.Schema({
     img: String,
     users: [{type:mongoose.ObjectId,ref:"users"}],
     last_msg: {type:mongoose.ObjectId,ref:'Message',required:true}
+},{
+    timestamps:true
 })
 
 export default mongoose.model('Conversation', schema)
