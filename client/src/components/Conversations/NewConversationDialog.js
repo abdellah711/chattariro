@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import Avatar from '../Avatar'
 import PrimaryButton from '../PrimaryButton'
@@ -8,27 +8,38 @@ import {ReactComponent as Icon} from '../../imgs/plus.svg'
 import { useSelector,useDispatch } from 'react-redux'
 import { showDialog,createConversation } from '../../features/appSlice'
 import { useSocketContext } from '../../context/socket-context'
+import {SERVER_URL} from '../../Constants/api'
+import authFetch from '../../utils/authFetch'
 
 const NewConversationDialog = () => {
 
-    const isDialogShown = useSelector(state=>state.app.isDialogShown)
+    const [isDialogShown,token] = useSelector(state=>[state.app.isDialogShown,state.app.user.token])
     const dispatch = useDispatch()
 
     const socket = useSocketContext()
 
     const [selected, setSelected] = useState([])
-    const users = [
-        {
-            email: "reda@gmail.com",
-            name: "reda",
-            _id: "611bd22377d63b0eb861685e",
-        },
-        {
-            email: "alaoui.midelt@gmail.com",
-            name: "alaoui",
-            _id: "610febbeb099c030645d44ed",
-        }
-    ]
+    const [query, setQuery] = useState('')
+    const [timeoutId, setTimeoutId] = useState(-1)
+    const [users, setUsers] = useState(null)
+
+    // const users = [
+    //     {
+    //         email: "reda@gmail.com",
+    //         name: "reda",
+    //         _id: "611bd22377d63b0eb861685e",
+    //     },
+    //     {
+    //         email: "alaoui.midelt@gmail.com",
+    //         name: "alaoui",
+    //         _id: "610febbeb099c030645d44ed",
+    //     }
+    // ]
+
+    useEffect(async ()=>{
+        const data = await authFetch(`${SERVER_URL}user`,token)
+        setUsers(data.data)
+    },[])
 
     const handleSelect = (contact)=>{
         setSelected(prev=>{
@@ -44,22 +55,37 @@ const NewConversationDialog = () => {
         setSelected(prev => prev.filter(s => s._id!==id))
     }
     const handleConversationCreating = () =>{
-        console.log('click')
         const newConv = {
             users: selected.map(u => u._id)
         }
         socket.emit('conversation:create', newConv, res => {
             if (res.success) {
-                console.log('conversation created successfully')
                 dispatch(createConversation(res.data))
             }
         })
     }
+
+    const handleType = e =>{
+        setQuery(e.target.value)
+    }
+
+    useEffect(()=>{
+        timeoutId!==-1 && clearTimeout(timeoutId)
+        setTimeoutId(
+            setTimeout(async () => {
+                const data = await authFetch(`${SERVER_URL}user/search?q=${encodeURI(query)}`,token)
+                setUsers(data.data)
+                }, 900)
+        )
+    },[query])
+
+
     return (
         <StyledModal style={{display:isDialogShown?'grid':'none'}}>
             <StyledDialog>
                 <StyledTitle>Create New Conversation</StyledTitle>
-                <Search/>
+                <Search value={query} onType={handleType}/>
+
                 <ContactsContainer>
                     <ContactsList contacts={users} onSelect={handleSelect} selected={selected}/>
                 </ContactsContainer>

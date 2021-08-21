@@ -34,8 +34,13 @@ const appSlice = createSlice({
                 ...state.messages[message.conv_id],
                 message
             ]
+            const conv = {...state.conversations?.find(c => c._id === message.conv_id), last_msg:message}
             return {
                 ...state,
+                conversations:[
+                    conv,
+                    ...state.conversations.filter(c=> c._id !== message.conv_id)
+                ],
                 messages: {
                     ...state.messages,
                     [message.conv_id]: messages

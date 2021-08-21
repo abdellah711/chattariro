@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Avatar from '../Avatar'
 import {Link} from 'react-router-dom'
-
+import moment from 'moment'
 
 const Conversation = ({selected,item,onClick,uId}) =>{
     console.log('item',item)
@@ -13,7 +13,6 @@ const Conversation = ({selected,item,onClick,uId}) =>{
     const read = item.last_msg.read.find(r=>r===uId)!==-1
     const readStyle =  {'--weight':read?'lighter':'bold'}
     const img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
-
     
     return (
         <StyledConversation style={style} onClick={onClick} to={`/c/${item._id}`}>
@@ -22,7 +21,7 @@ const Conversation = ({selected,item,onClick,uId}) =>{
                 <StyledName>{name}</StyledName>
                 <StyledMsg style={readStyle}><span>{sender}: </span>{item.last_msg.content} </StyledMsg>
             </div>
-            <StyledTime>{new Date(item.last_msg.createdAt).toDateString()}</StyledTime>
+            <StyledTime>{moment(new Date(item.last_msg.createdAt)).fromNow()}</StyledTime>
         </StyledConversation>
     )
 }

@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 
-const Search = () => {
+const Search = ({value,onType}) => {
     return (
         <StyledSearch
             placeholder="Search ..."
+            value={value}
+            onChange={onType}
         />
     )
 }

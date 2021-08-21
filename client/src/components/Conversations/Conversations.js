@@ -7,6 +7,8 @@ import {useSocketContext} from '../../context/socket-context'
 import { useDispatch, useSelector } from 'react-redux'
 import { setConversations } from '../../features/appSlice'
 import { useLocation } from 'react-router-dom'
+import moment from 'moment'
+
 
 export default function Conversations() {
     
@@ -24,6 +26,23 @@ export default function Conversations() {
                 
             }
         })
+        moment.locale('en', {
+            relativeTime : {
+                future: "in %s",
+                past:   "%s",
+                s:  "%ds",
+                m:  "1min",
+                mm: "%dmin",
+                h:  "1h",
+                hh: "%dh",
+                d:  "1d",
+                dd: "%dd",
+                M:  "1mth",
+                MM: "%dmth",
+                y:  "1y",
+                yy: "%dy"
+            }
+        });
     },[])
     const conversations = data?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
     return (

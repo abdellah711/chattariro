@@ -1,17 +1,20 @@
 import Avatar from "../Avatar"
 import styled from 'styled-components'
+import Progress from "../Progress"
 
 
 const ContactsList = ({contacts,onSelect,selected}) => {
     return (
         <StyledContainer>
-            {contacts.map(contact=> 
+            {contacts?contacts.map(contact=> 
                 <ContactItem 
                         key={contact._id}
                         contact={contact} 
                         onClick={()=>onSelect(contact)}
                         selected={selected.findIndex(c=>c._id===contact._id)!==-1}
                     />)
+                :
+                <Progress/>
             }
         </StyledContainer>
     )
@@ -48,6 +51,8 @@ const StyledItem = styled.div`
 `
 
 const StyledName = styled.p`
-
+    text-transform: capitalize;
+    font-size: 1.1rem;
+    letter-spacing: .5px;
 `
 export default ContactsList
