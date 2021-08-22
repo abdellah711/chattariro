@@ -16,7 +16,7 @@ export default (io) =>({
     
         
         const usersIds = users.map(u=>ObjectId(u))
-        usersIds.push(ObjectId(socket.user.id))
+        !users.includes(socket.user.id) && usersIds.push(ObjectId(socket.user.id))
     
         let conv = await Conversation.create({is_grp,img,users:usersIds,last_msg:msg._id}).catch(err=>cb({success:false,message:err.message}))
         conv = await Conversation.populate(conv,'users')

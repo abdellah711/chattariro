@@ -59,8 +59,13 @@ const NewConversationDialog = () => {
             users: selected.map(u => u._id)
         }
         socket.emit('conversation:create', newConv, res => {
+            console.log('err',res)
+            
             if (res.success) {
                 dispatch(createConversation(res.data))
+                setQuery('')
+                setSelected([])
+            }else{
             }
         })
     }

@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setConversations } from '../../features/appSlice'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
-
+import Search from './Search'
+import {ReactComponent as BackIcon} from '../../imgs/back-arrow.svg'
 
 export default function Conversations() {
     
@@ -18,6 +19,23 @@ export default function Conversations() {
     const socket = useSocketContext()
     const dispatch = useDispatch()
     const [data,userId] = useSelector(state => [state.app.conversations,state.app.user.id])
+    const [search, setSearch] = useState('')
+    const [filtered, setFiltered] = useState(data)
+
+
+    useEffect(()=>{
+        setFiltered(f=>{
+            if(search.trim()==='') return data
+            return data.filter(d =>{
+            for(let i=0;i<d.users.length;++i){
+                if(d.users[i]._id!==userId && d.users[i].name.includes(search.trim())){
+                    return true
+                }
+            }
+        }
+    )
+    })},[data,search])
+
     useEffect(()=>{
         socket.emit('conversation:list',res=>{
             if(res.success){
@@ -29,7 +47,7 @@ export default function Conversations() {
         moment.locale('en', {
             relativeTime : {
                 future: "in %s",
-                past:   "%s",
+                past: "%s",
                 s:  "%ds",
                 m:  "1min",
                 mm: "%dmin",
@@ -44,13 +62,17 @@ export default function Conversations() {
             }
         });
     },[])
-    const conversations = data?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
+    const conversations = filtered?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
     return (
         <Wrapper>
+            <SearchWrappper>
+                {search.length>0 && <BackIcon onClick={()=>setSearch('')}/>}
+                <Search value={search} onType={e=>setSearch(e.target.value)} />
+            </SearchWrappper>
             <StyledContainer>
-                {!data?
+                {!filtered?
                 <ProgressContainer><Progress/></ProgressContainer>
-                :data.length?
+                :filtered.length?
                 conversations
                 :<StyledEmpty>No Conversation</StyledEmpty> //todo design empty view
             }
@@ -63,16 +85,19 @@ export default function Conversations() {
 const StyledContainer = styled.div`
     display:flex;
     flex-direction: column;
-    padding: .5em;
+    padding-block: .5em;
     gap: .5em;
-    height:100%;
     overflow-y:auto;
+    flex:1;
+    padding-left: .83em;
     `
 const Wrapper = styled.div`
     box-shadow: var(--shadow);
     position:relative;
     flex:1;
     height:100%;
+    display:flex;
+    flex-direction: column;
 `
 const ProgressContainer = styled.div`
     height:100%;
@@ -88,4 +113,27 @@ const StyledEmpty = styled.div`
     align-items: center;
     font-size:1.1rem;
     user-select:none;
+`
+
+const SearchWrappper = styled.div`
+    display:flex;
+    padding: .33em .83em;
+    align-items: center;
+    gap:5px;
+    &>input{
+        flex:1;
+    }
+
+    &>svg{
+        height:35px;
+        width:35px;
+        padding: 5px;
+        border-radius: 50%;
+        cursor:pointer;
+        transition: .3s;
+        &:hover{
+            background-color:rgba(100,100,100,.2);
+        }
+    }
+
 `
