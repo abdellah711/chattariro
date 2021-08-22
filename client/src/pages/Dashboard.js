@@ -6,12 +6,17 @@ import { useSocketContext } from '../context/socket-context'
 import { useDispatch } from 'react-redux'
 import { receiveMessage,createConversation } from '../features/appSlice'
 import NewConversationDialog from '../components/Conversations/NewConversationDialog'
+import useMobile from '../hooks/useMobile'
+import { useLocation } from 'react-router'
 
 export default function Dashboard() {
 
     const dispatch = useDispatch()
     
     const socket = useSocketContext()
+    const isMobile = useMobile()
+    const location = useLocation()
+    const inConversation = location.pathname.split('/')[2]
 
     useEffect(()=>{
         socket.on('receive-message',(message)=>{
@@ -29,8 +34,8 @@ export default function Dashboard() {
 
     return (
         <StyledContainer>
-            <Conversations/>
-            <Chat/>
+            {isMobile ? !inConversation && <Conversations/>: <Conversations/>}
+            {isMobile ? inConversation && <Chat/>:<Chat/>}
             <NewConversationDialog/>
         </StyledContainer>
     )

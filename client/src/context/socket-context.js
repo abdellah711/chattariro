@@ -1,6 +1,7 @@
 import React,{useContext, useMemo} from 'react';
 import io from 'socket.io-client'
 import {useSelector} from 'react-redux'
+import { SERVER_URL } from '../Constants/api';
 const SocketContext = React.createContext(null)
 
 export const useSocketContext = () =>{
@@ -10,7 +11,7 @@ export const useSocketContext = () =>{
 
 export const SocketProvider = ({children})=>{
     const token = useSelector(state=>state.app?.user?.token)
-    const socket = useMemo(()=>new io('http://localhost:5000',{
+    const socket = useMemo(()=>new io(SERVER_URL,{
         auth:{
             token
         }

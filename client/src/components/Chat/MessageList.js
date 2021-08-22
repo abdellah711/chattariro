@@ -49,10 +49,11 @@ const Message = ({message,isMe,sender}) =>{
 const StyledEvent = styled.p`
     background-color: rgba(100,100,100,.5);
     align-self: center;
-    max-width: 50%;
+    max-width: 70%;
     padding: .3em .5em;
     border-radius: var(--border-radius);
-
+    text-align: center;
+    margin-block: .3em;
     &>span{
         text-transform: capitalize;
     }

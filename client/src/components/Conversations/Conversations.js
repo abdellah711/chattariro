@@ -89,7 +89,7 @@ const StyledContainer = styled.div`
     gap: .5em;
     overflow-y:auto;
     flex:1;
-    padding-left: .83em;
+    padding-inline: .8em;
     `
 const Wrapper = styled.div`
     box-shadow: var(--shadow);
