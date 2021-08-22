@@ -191,7 +191,6 @@ const CancelButton = styled.button`
     font-size:.95rem;
     padding-inline:1em;
     background-color: transparent;
-    transition: background-color .3s;
     &:hover{
         background-color: rgba(0,0,0,.1);
     }

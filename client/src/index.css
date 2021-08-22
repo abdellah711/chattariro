@@ -21,6 +21,7 @@
   --input-bg:#fff;
   --input-ph: rgb(190, 190, 190);
   --scrollbar-color:#b1b1b1;
+  --second-color:#3f3d56;
   /* --bg: #202020;
   --bg-card: #353535;
   --text-color: #fafafa;
@@ -42,6 +43,10 @@ body {
   font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: color .3s;
+}
+body *{
+  transition: background-color .3s;
 }
 ::-webkit-scrollbar {
   width: 15px;
@@ -52,11 +57,22 @@ body {
   border-radius:50px;
   border: 4px solid transparent;
   background-clip: padding-box;
-
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+.dark{
+    --bg: #202020;
+    --bg-card: #353535;
+    --text-color: #fafafa;
+    --text-second: #afafaf; 
+    --error-color: #fa2020c9;
+    --error-color20: #fa20201f;
+    --shadow:none;
+    --input-bg:rgb(43, 43, 43);
+    --scrollbar-color:#5a5a5a;
+    --input-ph: rgb(80, 80, 80);
+    --second-color:#474379;
+}

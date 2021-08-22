@@ -44,7 +44,6 @@ const StyledItem = styled.div`
     margin: .5em;
     cursor: pointer;
     border-radius: 1em;
-    transition: background-color .3s;
     &:hover{
         background-color: var(--primary20);
     }
