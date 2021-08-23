@@ -4,6 +4,7 @@ const animation = keyframes`
     from{ transform: rotate(0)}
     to{ transform: rotate(360deg)}
 `
+
 export default styled.div`
     border: 2px solid var(--primary);
     width: 30px;

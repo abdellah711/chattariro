@@ -2,6 +2,8 @@ import { useEffect,useRef } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Avatar from '../Avatar'
+import Progress from '../Progress'
+
 
 export default function MessageList({conv_id}) {
 
@@ -14,8 +16,11 @@ export default function MessageList({conv_id}) {
 
 
     return (
-        <StyledContainer>
-            {messages?.map(message=> <Message key={message._id} message={message} sender={users?.find(u=>u._id===message.sender)} isMe={message.sender ===userId}/>)}
+        <StyledContainer style={{marginBottom:messages?'0':'auto'}}>
+            {messages?
+                messages.map(message=> <Message key={message._id} message={message} sender={users?.find(u=>u._id===message.sender)} isMe={message.sender ===userId}/>)
+                :<Progress/>
+            }
             <div ref={bottomRef}></div>
         </StyledContainer>
     )
@@ -27,6 +32,7 @@ const StyledContainer = styled.div`
     display:flex;
     flex-direction: column;
     overflow-y: auto;
+    align-items: center;
 `
 
 const Message = ({message,isMe,sender}) =>{
@@ -37,7 +43,7 @@ const Message = ({message,isMe,sender}) =>{
         </StyledEvent>)
     }
     return (
-        <MsgContainer style={isMe? {alignSelf: 'flex-end'}:{}}>
+        <MsgContainer style={{alignSelf: isMe?'flex-end':'flex-start'}}>
             {!isMe && <Avatar name={sender?.name} src={sender?.img}/>}
             <StyledMessage style={isMe?{}: {backgroundColor:'var(--primary)',color:'var(--onPrimary)'}}>
                 <p>{message.content}</p>
@@ -48,7 +54,6 @@ const Message = ({message,isMe,sender}) =>{
 
 const StyledEvent = styled.p`
     background-color: rgba(100,100,100,.5);
-    align-self: center;
     max-width: 70%;
     padding: .3em .5em;
     border-radius: var(--border-radius);

@@ -21,20 +21,9 @@ const NewConversationDialog = () => {
     const [selected, setSelected] = useState([])
     const [query, setQuery] = useState('')
     const [timeoutId, setTimeoutId] = useState(-1)
+    const [isLoading, setIsLoading] = useState(false)
     const [users, setUsers] = useState(null)
 
-    // const users = [
-    //     {
-    //         email: "reda@gmail.com",
-    //         name: "reda",
-    //         _id: "611bd22377d63b0eb861685e",
-    //     },
-    //     {
-    //         email: "alaoui.midelt@gmail.com",
-    //         name: "alaoui",
-    //         _id: "610febbeb099c030645d44ed",
-    //     }
-    // ]
 
     useEffect(async ()=>{
         const data = await authFetch(`${SERVER_URL}user`,token)
@@ -54,12 +43,15 @@ const NewConversationDialog = () => {
     const handleDeselect = (id) =>{
         setSelected(prev => prev.filter(s => s._id!==id))
     }
+
     const handleConversationCreating = () =>{
+        setIsLoading(true)
         const newConv = {
             users: selected.map(u => u._id)
         }
         socket.emit('conversation:create', newConv, res => {
-            console.log('err',res)
+            
+            setIsLoading(false)
             
             if (res.success) {
                 dispatch(createConversation(res.data))
@@ -101,7 +93,7 @@ const NewConversationDialog = () => {
 
                 <ButtonsWrapper>
                     <CancelButton onClick={()=>dispatch(showDialog(false))}>Cancel</CancelButton>
-                    <PrimaryButton style={{ fontSize: '.95rem' }} onClick={handleConversationCreating} disabled={selected.length===0}>start</PrimaryButton>
+                    <PrimaryButton style={{ fontSize: '.95rem' }} onClick={handleConversationCreating} disabled={selected.length===0} loading={isLoading}>start</PrimaryButton>
                 </ButtonsWrapper>
             </StyledDialog>
         </StyledModal>
