@@ -11,12 +11,17 @@ export default (io) =>({
         const {is_grp,users,img} = payload
 
         if(!users) return cb({success:false, message:'Please provide conversation members'})
-    
-        const msg = await Message.create({sender:ObjectId(socket.user.id),type:"event",content:"started new conversation"}).catch(err=>cb({success:false,message:err.message}))
-    
-        
         const usersIds = users.map(u=>ObjectId(u))
         !users.includes(socket.user.id) && usersIds.push(ObjectId(socket.user.id))
+        
+        if(usersIds.length === 2){
+            const existingConv = await Conversation.findOne({users:{$all:users, $size:2}})
+            if(existingConv) return cb({success:true,exists:true,data:existingConv})
+        }
+
+
+        const msg = await Message.create({sender:ObjectId(socket.user.id),type:"event",content:"started new conversation"}).catch(err=>cb({success:false,message:err.message}))
+    
     
         let conv = await Conversation.create({is_grp,img,users:usersIds,last_msg:msg._id}).catch(err=>cb({success:false,message:err.message}))
         conv = await Conversation.populate(conv,'users')

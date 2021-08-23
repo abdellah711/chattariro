@@ -4,16 +4,16 @@ import {ReactComponent as WelcomeIcon} from '../../imgs/welcome.svg'
 import ChatForm from './ChatForm'
 import ProfileNav from './ProfileNav'
 import MessageList from './MessageList'
-import { useEffect } from 'react'
+import { useEffect,useMemo } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useSocketContext } from '../../context/socket-context'
 import { receiveMessages } from '../../features/appSlice'
 export default function Chat() {
-
+    
     const location = useLocation()
     const history = useHistory()
     const dispatch = useDispatch()
-    const conv_id = location.pathname.split('/')[2]
+    const conv_id = useMemo(()=>location.pathname.split('/')[2],[location.pathname])
     const [conversation,messages,isLoading] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.messages[conv_id],state.app.isLoadingConversation])
     const socket = useSocketContext()
 

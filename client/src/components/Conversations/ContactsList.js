@@ -6,7 +6,8 @@ import Progress from "../Progress"
 const ContactsList = ({contacts,onSelect,selected}) => {
     return (
         <StyledContainer>
-            {contacts?contacts.map(contact=> 
+            {contacts?
+            contacts.map(contact=> 
                 <ContactItem 
                         key={contact._id}
                         contact={contact} 
@@ -14,14 +15,16 @@ const ContactsList = ({contacts,onSelect,selected}) => {
                         selected={selected.findIndex(c=>c._id===contact._id)!==-1}
                     />)
                 :
-                <Progress/>
+                <ProgressWrapper>
+                    <Progress/>
+                </ProgressWrapper>
             }
         </StyledContainer>
     )
 }
 
 const StyledContainer = styled.div`
-    max-height:100%;
+    height:100%;
     width:100%;
 `
 
@@ -54,4 +57,10 @@ const StyledName = styled.p`
     font-size: 1.1rem;
     letter-spacing: .5px;
 `
+const ProgressWrapper = styled.div`
+    height:100%;
+    display:grid;
+    place-items: center;
+`
+
 export default ContactsList

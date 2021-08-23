@@ -26,7 +26,9 @@ const appSlice = createSlice({
 
         },
         createConversation: (state, action) => {
-            return { ...state, conversations: [action.payload,...state.conversations ],isDialogShown:false }
+            const conversation = action.payload.data
+            if(action.payload.exists) return {...state,isDialogShown:false}
+            return { ...state, conversations: [conversation,...state.conversations ],isDialogShown:false }
         },
         receiveMessage: (state, action) => {
             const message = action.payload

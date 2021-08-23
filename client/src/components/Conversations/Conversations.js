@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import Conversation from './Conversation'
 import Progress from '../Progress'
 import FAB from './FAB'
@@ -14,8 +14,7 @@ import {ReactComponent as BackIcon} from '../../imgs/back-arrow.svg'
 export default function Conversations() {
     
     const location = useLocation()
-    const conv_id = location.pathname.split('/')[2]
-    const [selected, setSelected] = useState(conv_id??-1)
+    const conv_id = useMemo(()=>location.pathname.split('/')[2]??-1,[location.pathname])
     const socket = useSocketContext()
     const dispatch = useDispatch()
     const [data,userId] = useSelector(state => [state.app.conversations,state.app.user.id])
@@ -35,6 +34,7 @@ export default function Conversations() {
         }
     )
     })},[data,search])
+
 
     useEffect(()=>{
         socket.emit('conversation:list',res=>{
@@ -62,7 +62,7 @@ export default function Conversations() {
             }
         });
     },[])
-    const conversations = filtered?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==selected} onClick={()=>setSelected(item._id)}/>)
+    const conversations = filtered?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==conv_id}/>)
     return (
         <Wrapper>
             <SearchWrappper>

@@ -3,7 +3,7 @@ import Avatar from '../Avatar'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 
-const Conversation = ({selected,item,onClick,uId}) =>{
+const Conversation = ({selected,item,uId}) =>{
     console.log('item',item)
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}
     const sender = item.last_msg.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
@@ -15,7 +15,7 @@ const Conversation = ({selected,item,onClick,uId}) =>{
     const img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
     
     return (
-        <StyledConversation style={style} onClick={onClick} to={`/c/${item._id}`}>
+        <StyledConversation style={style} to={`/c/${item._id}`}>
             <Avatar name={name} src={img} style={{'--size':'3.5rem'}}/>
             <div className="conv_data">
                 <StyledName>{name}</StyledName>

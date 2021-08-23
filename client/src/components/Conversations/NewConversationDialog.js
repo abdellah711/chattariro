@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState,useMemo } from 'react'
 import styled, { keyframes } from 'styled-components'
 import Avatar from '../Avatar'
 import PrimaryButton from '../PrimaryButton'
@@ -10,11 +10,13 @@ import { showDialog,createConversation } from '../../features/appSlice'
 import { useSocketContext } from '../../context/socket-context'
 import {SERVER_URL} from '../../Constants/api'
 import authFetch from '../../utils/authFetch'
+import { useHistory } from 'react-router-dom'
 
 const NewConversationDialog = () => {
 
     const [isDialogShown,token] = useSelector(state=>[state.app.isDialogShown,state.app.user.token])
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const socket = useSocketContext()
 
@@ -23,11 +25,12 @@ const NewConversationDialog = () => {
     const [timeoutId, setTimeoutId] = useState(-1)
     const [isLoading, setIsLoading] = useState(false)
     const [users, setUsers] = useState(null)
-
+    const [initialData, setInitialData] = useState(null)
 
     useEffect(async ()=>{
         const data = await authFetch(`${SERVER_URL}user`,token)
         setUsers(data.data)
+        setInitialData(data.data)
     },[])
 
     const handleSelect = (contact)=>{
@@ -54,10 +57,12 @@ const NewConversationDialog = () => {
             setIsLoading(false)
             
             if (res.success) {
-                dispatch(createConversation(res.data))
+                dispatch(createConversation(res))
                 setQuery('')
                 setSelected([])
+                history.push('/c/'+res.data._id)
             }else{
+                console.error('failed to create conversation')
             }
         })
     }
@@ -68,6 +73,7 @@ const NewConversationDialog = () => {
 
     useEffect(()=>{
         timeoutId!==-1 && clearTimeout(timeoutId)
+        if(query === '') return setUsers(initialData)
         setTimeoutId(
             setTimeout(async () => {
                 const data = await authFetch(`${SERVER_URL}user/search?q=${encodeURI(query)}`,token)
