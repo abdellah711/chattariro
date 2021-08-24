@@ -23,7 +23,8 @@ export default function Dashboard() {
             dispatch(receiveMessage(message))
         })
         socket.on('new-conversation',(conversation)=>{
-            dispatch(createConversation(conversation))
+            console.log('receive conv',conversation)
+            dispatch(createConversation({data:conversation}))
             socket.emit('conversation:join',conversation._id)
         })
         return ()=> {
@@ -35,7 +36,7 @@ export default function Dashboard() {
     return (
         <StyledContainer>
             {isMobile ? !inConversation && <Conversations/>: <Conversations/>}
-            {isMobile ? inConversation && <Chat/>:<Chat/>}
+            {isMobile ? inConversation && <Chat animate/>:<Chat/>}
             <NewConversationDialog/>
         </StyledContainer>
     )
@@ -44,5 +45,5 @@ export default function Dashboard() {
 const StyledContainer = styled.div`
     display:flex;
     height:calc(100% - 5rem);
-    
+    overflow-x: hidden;
 `

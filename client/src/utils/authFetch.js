@@ -1,11 +1,13 @@
 
 
-export default async (url,token) =>{
+export default async (url,token,method='GET',body) =>{
     const res = await fetch(url,{
+        method,
         headers:{
             Authorization: `Bearer ${token}`
-        }
-    })
-    const data = res.json()
+        },
+        body
+    }).catch(err=>{throw err})
+    const data = res.json().catch(err=>{throw err})
     return data
 }

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import {useHistory, useLocation} from 'react-router-dom'
 import {ReactComponent as WelcomeIcon} from '../../imgs/welcome.svg'
 import ChatForm from './ChatForm'
@@ -8,7 +8,7 @@ import { useEffect,useMemo } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useSocketContext } from '../../context/socket-context'
 import { receiveMessages } from '../../features/appSlice'
-export default function Chat() {
+export default function Chat({animate}) {
     
     const location = useLocation()
     const history = useHistory()
@@ -39,7 +39,7 @@ export default function Chat() {
     },[isLoading,location.pathname])
 
     return (
-        <StyledContainer>
+        <StyledContainer animate={animate}>
             {!(conv_id && conv_id.length)? <NoChat/>
             :
             <ChatContainer>
@@ -51,11 +51,17 @@ export default function Chat() {
     )
 }
 
+const enterAnimation = keyframes`
+    from{transform: translate(70vw);opacity:0}
+    to{transform: translate(0);opacity:1}
+`
+
 const StyledContainer = styled.div`
     flex:2;
     height:100%;
     background-color:var(--bg-card);
     border-radius:var(--border-radius);
+    animation: ${p=>p.animate && enterAnimation} .3s;
 `
 
 const ChatContainer = styled.div`

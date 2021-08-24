@@ -15,7 +15,7 @@ export default (io) =>({
         !users.includes(socket.user.id) && usersIds.push(ObjectId(socket.user.id))
         
         if(usersIds.length === 2){
-            const existingConv = await Conversation.findOne({users:{$all:users, $size:2}})
+            const existingConv = await Conversation.findOne({users:usersIds}).populate('users')
             if(existingConv) return cb({success:true,exists:true,data:existingConv})
         }
 

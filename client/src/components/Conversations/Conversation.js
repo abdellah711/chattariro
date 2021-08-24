@@ -6,7 +6,7 @@ import moment from 'moment'
 const Conversation = ({selected,item,uId}) =>{
     console.log('item',item)
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}
-    const sender = item.last_msg.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
+    const sender = item.last_msg?.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
     const name = item.is_grp?
                     item.grp_name?item.grp_name:item.users.map(u=>u.name).join(' ')
                     :item.users.find(u=>u._id!==uId)?.name

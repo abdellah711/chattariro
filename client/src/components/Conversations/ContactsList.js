@@ -31,7 +31,7 @@ const StyledContainer = styled.div`
 const ContactItem = ({contact,onClick,selected}) =>{
     return (
         <StyledItem onClick={onClick}>
-            <Avatar name={selected?String.fromCharCode(10004):contact.name} src={contact.img} showChar={selected}/>
+            <Avatar name={contact.name} src={contact.img} selected={selected}/>
             <StyledName>
                 {contact.name}
             </StyledName>

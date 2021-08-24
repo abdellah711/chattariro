@@ -55,7 +55,7 @@ const NewConversationDialog = () => {
         socket.emit('conversation:create', newConv, res => {
             
             setIsLoading(false)
-            
+            console.log(res)
             if (res.success) {
                 dispatch(createConversation(res))
                 setQuery('')

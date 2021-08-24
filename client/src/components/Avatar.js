@@ -1,5 +1,6 @@
 import styled,{css} from 'styled-components'
 import {Link } from 'react-router-dom'
+import {ReactComponent as CheckedIcon } from '../imgs/check.svg'
 
 
 const containerCss = css`
@@ -17,13 +18,14 @@ const containerCss = css`
     flex-shrink:0;
 `
 
-export default function Avatar({src,name,to,style,showChar=false}) {
+export default function Avatar({src,name,to,style,selected=false,...rest}) {
 
     const StyledContainer = to ?StyledLink: StyledWrapper
 
     return (
-        <StyledContainer to={to} style={style}>
-           {(src && !showChar)? <StyledImg src={src} />
+        <StyledContainer to={to} style={style} {...rest}>
+           {selected? <StyledIcon/>
+           : src ?<StyledImg src={src} />
            : <StyledChar>{name&&name[0]?.toUpperCase()}</StyledChar>
            } 
         </StyledContainer>
@@ -42,4 +44,8 @@ const StyledImg = styled.img`
     height:100%;
     width:100%;
     object-fit:cover;
+`
+
+const StyledIcon = styled(CheckedIcon)`
+    padding: .3em;
 `

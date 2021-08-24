@@ -6,6 +6,7 @@ import userRoute from './routes/user.js'
 import convRouter from './routes/conversation.js'
 import handler from './handlers/conversation.js'
 import {authIO} from './middlewares/auth.js'
+import upload from './routes/upload.js'
 import cors from 'cors'
 
 const PORT = process.env.PORT||5000
@@ -28,9 +29,10 @@ mongoose.connect(URL,{
     .then(()=>console.log('db connected successfully'))
     .catch(()=>console.log('db failed to connect'))
 
+app.use('/static',express.static('static'))
 app.use('/user',userRoute)
 app.use('/conversations',convRouter)
-
+app.use('/upload',upload)
 
 const io = new Server(server,{
     cors:['http://localhost:5000/']
@@ -47,7 +49,7 @@ io.use(authIO)
 
 io.on('connection',socket=>{
     console.log('connection',socket.id)
-
+    
     socket.on('conversation:list',listConversations)
     socket.on('conversation:create',createConversation)
     socket.on('conversation:join',joinConversation)

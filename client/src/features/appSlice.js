@@ -62,6 +62,12 @@ const appSlice = createSlice({
         },
         showDialog: (state, action) => {
             return { ...state, isDialogShown: action.payload }
+        },
+        updateProfileImg: (state,action)=>{
+            let user = {...state.user}
+            user.img = action.payload
+            localStorage.setItem('user',JSON.stringify(user))
+            return {...state,user}
         }
     }
 });
@@ -71,6 +77,7 @@ export const { setUser,
     setConversations,
     receiveMessage,
     receiveMessages,
-    showDialog
+    showDialog,
+    updateProfileImg,
 } = appSlice.actions
 export default appSlice.reducer
