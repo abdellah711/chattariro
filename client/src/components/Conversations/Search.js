@@ -6,6 +6,9 @@ const Search = ({value,onType}) => {
             placeholder="Search ..."
             value={value}
             onChange={onType}
+            name="search"
+            type="search"
+            autoComplete="false"
         />
     )
 }

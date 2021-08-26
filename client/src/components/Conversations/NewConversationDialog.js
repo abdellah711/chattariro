@@ -11,10 +11,12 @@ import { useSocketContext } from '../../context/socket-context'
 import {SERVER_URL} from '../../Constants/api'
 import authFetch from '../../utils/authFetch'
 import { useHistory } from 'react-router-dom'
+import Dialog from '../Dialog'
+import SecondButton from '../SecondButton'
 
 const NewConversationDialog = () => {
 
-    const [isDialogShown,token] = useSelector(state=>[state.app.isDialogShown,state.app.user.token])
+    const token = useSelector(state=>state.app.user.token)
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -84,9 +86,8 @@ const NewConversationDialog = () => {
 
 
     return (
-        <StyledModal style={{display:isDialogShown?'grid':'none'}}>
-            <StyledDialog>
-                <StyledTitle>Create New Conversation</StyledTitle>
+            <StyledContainer>
+                <h2>Create New Conversation</h2>
                 <Search value={query} onType={handleType}/>
 
                 <ContactsContainer>
@@ -98,11 +99,10 @@ const NewConversationDialog = () => {
                 </SelectedContainer>
 
                 <ButtonsWrapper>
-                    <CancelButton onClick={()=>dispatch(showDialog(false))}>Cancel</CancelButton>
+                    <SecondButton onClick={()=>dispatch(showDialog({show:false}))}>Cancel</SecondButton>
                     <PrimaryButton style={{ fontSize: '.95rem' }} onClick={handleConversationCreating} disabled={selected.length===0} loading={isLoading}>start</PrimaryButton>
                 </ButtonsWrapper>
-            </StyledDialog>
-        </StyledModal>
+            </StyledContainer>
     )
 }
 
@@ -114,6 +114,14 @@ const SelectedItem = ({contact,onDeselect}) =>{
         </StyledSelectedItem>
     )
 }
+
+const StyledContainer = styled.div`
+    height: 80vh;
+    display:flex;
+    flex-direction:column;
+    padding: .83rem 1rem;
+    gap: .5rem;
+`
 
 const StyledSelectedItem = styled.div`
     position: relative;
@@ -131,67 +139,10 @@ const StyledSelectedItem = styled.div`
         padding: 2px;
     }
 `
-const modalAnimation = keyframes`
-    from{
-        opacity:.1;
-    }
-    to{
-        opacity: 1;
-    }
-`
 
-const StyledModal = styled.div`
-    position:fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    background-color: rgba(80,80,80,.7);
-    place-items: center;
-    animation: ${modalAnimation} .3s;
-`
-const showAnimation = keyframes`
-        from{
-            opacity:.1;
-            transform: scale(.1);
-        }
-        to{
-            opacity: 1;
-            transform: scale(1);
-        }
-`
-const StyledDialog = styled.div`
-    height: 75vh;
-    width: min(600px,80vw);
-    background-color:var(--bg);
-    border-radius: 12px;
-    display:flex;
-    flex-direction:column;
-    padding: .83rem 1rem;
-    gap: .5rem;
-    /* transform: scale(0); */
-    animation: ${showAnimation} .4s;
-`
-
-const StyledTitle = styled.h2`
-
-`
 const ButtonsWrapper = styled.div`
     display:flex;
     justify-content: space-between;
-`
-const CancelButton = styled.button`
-    border:0;
-    border-radius:var(--border-radius);
-    color: var(--text-second);
-    cursor:pointer;
-    height:100%;
-    font-size:.95rem;
-    padding-inline:1em;
-    background-color: transparent;
-    &:hover{
-        background-color: rgba(0,0,0,.1);
-    }
 `
 
 const ContactsContainer = styled.div`

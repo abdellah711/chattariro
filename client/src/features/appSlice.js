@@ -1,11 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { SERVER_URL } from '../Constants/api';
+import dialogContent from '../Constants/dialog';
 
 const initialState = {
     user: JSON.parse(localStorage.getItem('user')),
     conversations: null,
     messages: {},
     isLoadingConversation: true,
-    isDialogShown: false
+    dialog: {
+        show:false,
+        content: dialogContent.NEW_CONVERSATION
+    }
 }
 
 const appSlice = createSlice({
@@ -13,8 +18,10 @@ const appSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            const newState = { ...state, ...action.payload }
-            localStorage.setItem('user', JSON.stringify(newState.user))
+            let user = action.payload
+            user.img = user.img.startsWith('http')?user.img:SERVER_URL+user.img
+            const newState = { ...state, user }
+            localStorage.setItem('user', JSON.stringify(user))
             return newState
         },
         setConversations: (state, action) => {
@@ -61,13 +68,18 @@ const appSlice = createSlice({
             }
         },
         showDialog: (state, action) => {
-            return { ...state, isDialogShown: action.payload }
+            return { ...state, dialog: {...state.dialog, ...action.payload} }
         },
         updateProfileImg: (state,action)=>{
-            let user = {...state.user}
-            user.img = action.payload
+            let img = action.payload
+            img = img.startsWith('http')?img:SERVER_URL+img
+            let user = {...state.user,img}
             localStorage.setItem('user',JSON.stringify(user))
             return {...state,user}
+        },
+        logout: (state,action) =>{
+            localStorage.removeItem('user')
+            return initialState
         }
     }
 });
@@ -79,5 +91,7 @@ export const { setUser,
     receiveMessages,
     showDialog,
     updateProfileImg,
+    logout,
+    
 } = appSlice.actions
 export default appSlice.reducer

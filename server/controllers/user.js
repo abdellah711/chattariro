@@ -18,10 +18,11 @@ export const signin = async (req,res,next) =>{
 
     if(!isCorrect) return res.status(403).json({success:false,field:'password',message:'Wrong Password!'})
     
-    const data = {id:user._id,user: user.name}
+    const data = {id:user._id,user: user.name,email:user.email}
     
     const token = jwt.sign(data,KEY)
-    res.status(200).json({success:true,token,data})
+
+    res.status(200).json({success:true,token,data:user})
 }
 
 export const signup = async (req,res,next) =>{
@@ -38,10 +39,11 @@ export const signup = async (req,res,next) =>{
     const user = await User.create({name,email,password:pwd}).catch(next)
 
     //returning token
-    const data = {id:user._id,user: user.name}
+    const data = {id:user._id,user: user.name,email:user.email}
     
     const token = jwt.sign(data,KEY)
-    res.status(200).json({success:true,token,data})
+
+    res.status(200).json({success:true,token,data:user})
 }
 
 export const search = async (req,res,next) =>{
@@ -64,4 +66,11 @@ export const listUsers = async (req,res,next) =>{
     ]).catch(next)
 
     res.json({success:true,data})
+}
+
+export const deleteAccount = async (req,res,next) =>{
+
+    await User.findByIdAndDelete(req.user.id).catch(next)
+
+    res.json({success:true})
 }

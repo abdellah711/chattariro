@@ -6,7 +6,7 @@ import Modal from './components/Modal';
 import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import { useSelector} from 'react-redux'
-import Profile from './components/Profile';
+import Profile from './components/Profile/Profile';
 import {SocketProvider} from './context/socket-context'
 
 

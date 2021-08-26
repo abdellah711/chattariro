@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
 
-export default function Input({type,name,placeholder,error,value,onChange}) {
+export default function Input({type,name,placeholder,forcedPlaceholder,error,...rest}) {
     return (
         <StyledLabel>
             {placeholder}:
-            <input className={error&&"error"} name={name} onChange={onChange} value={value} type={type} placeholder={"Enter your "+placeholder.toLowerCase()} required/>
+            <input className={error&&"error"} name={name} {...rest} type={type} placeholder={forcedPlaceholder?forcedPlaceholder:"Enter your "+placeholder.toLowerCase()} required/>
             {error&& <span>{error}</span>}
         </StyledLabel>
     )

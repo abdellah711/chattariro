@@ -52,7 +52,7 @@ export default function Chat({animate}) {
 }
 
 const enterAnimation = keyframes`
-    from{transform: translate(70vw);opacity:0}
+    from{transform: translate(50vw);opacity:0}
     to{transform: translate(0);opacity:1}
 `
 
@@ -61,7 +61,7 @@ const StyledContainer = styled.div`
     height:100%;
     background-color:var(--bg-card);
     border-radius:var(--border-radius);
-    animation: ${p=>p.animate && enterAnimation} .3s;
+    animation: ${p=>p.animate && enterAnimation} .2s;
 `
 
 const ChatContainer = styled.div`

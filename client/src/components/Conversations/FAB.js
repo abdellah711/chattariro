@@ -2,13 +2,14 @@ import styled from 'styled-components'
 import { ReactComponent as PlusIcon } from '../../imgs/plus.svg'
 import { useDispatch } from 'react-redux'
 import { showDialog } from '../../features/appSlice'
+import dialogContent from '../../Constants/dialog';
 
 export default function FAB() {
     const dispatch = useDispatch()
 
     const handleClick = () => {
         
-        dispatch(showDialog(true))
+        dispatch(showDialog({show:true,content:dialogContent.NEW_CONVERSATION}))
     }
 
     return (

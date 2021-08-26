@@ -15,7 +15,7 @@ export default function ProfileNav() {
 
     const path = useMemo(() => location.pathname+(location.pathname.endsWith('/')?'':'/') + 'profile', [location])
     const conv_id = path.split('/')[2]
-    const [conversation,uId] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.user.id])
+    const [conversation,uId] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.user._id])
     
     if(!conversation) return <></>
 

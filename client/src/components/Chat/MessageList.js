@@ -8,7 +8,7 @@ import Progress from '../Progress'
 export default function MessageList({conv_id}) {
 
     const bottomRef = useRef()
-    const [messages,userId,users] = useSelector(state => [state.app.messages[conv_id],state.app.user.id,state.app.conversations?.find(c=>c._id===conv_id)?.users])
+    const [messages,userId,users] = useSelector(state => [state.app.messages[conv_id],state.app.user._id,state.app.conversations?.find(c=>c._id===conv_id)?.users])
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" })

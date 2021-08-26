@@ -15,7 +15,7 @@ export const SocketProvider = ({children})=>{
         auth:{
             token
         }
-    }),[])
+    }),[token])
 
     return (
         <SocketContext.Provider value={socket}>

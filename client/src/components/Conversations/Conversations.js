@@ -17,7 +17,7 @@ export default function Conversations() {
     const conv_id = useMemo(()=>location.pathname.split('/')[2]??-1,[location.pathname])
     const socket = useSocketContext()
     const dispatch = useDispatch()
-    const [data,userId] = useSelector(state => [state.app.conversations,state.app.user.id])
+    const [data,userId] = useSelector(state => [state.app.conversations,state.app.user._id])
     const [search, setSearch] = useState('')
     const [filtered, setFiltered] = useState(data)
 
@@ -61,7 +61,7 @@ export default function Conversations() {
                 yy: "%dy"
             }
         });
-    },[])
+    },[socket])
     const conversations = filtered?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==conv_id}/>)
     return (
         <Wrapper>

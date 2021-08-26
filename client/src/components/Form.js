@@ -19,7 +19,7 @@ export default function Form(props) {
     
     useEffect(() => {
         if(isSuccess && data){
-            dispatch(setUser({user:{token:data.token,...data.data}}))
+            dispatch(setUser({token:data.token,...data.data}))
             return
         }
         if(isError && error){

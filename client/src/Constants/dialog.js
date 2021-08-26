@@ -1,0 +1,5 @@
+export default {
+    NEW_CONVERSATION: 0,
+    CHANGE_PASSWORD: 1,
+    DELETE_ACCOUNT:2
+}

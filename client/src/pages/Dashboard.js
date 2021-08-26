@@ -3,16 +3,20 @@ import styled from 'styled-components'
 import Chat from '../components/Chat/Chat'
 import Conversations from '../components/Conversations/Conversations'
 import { useSocketContext } from '../context/socket-context'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { receiveMessage,createConversation } from '../features/appSlice'
 import NewConversationDialog from '../components/Conversations/NewConversationDialog'
 import useMobile from '../hooks/useMobile'
 import { useLocation } from 'react-router'
+import Dialog from '../components/Dialog'
+import dialogContent from '../Constants/dialog'
+import DeleteAccountDialog from '../components/Profile/DeleteAccountDialog'
+import ChangePasswordDialog from '../components/Profile/ChangePasswordDialog'
 
 export default function Dashboard() {
 
     const dispatch = useDispatch()
-    
+    const dialog = useSelector(state => state.app.dialog)
     const socket = useSocketContext()
     const isMobile = useMobile()
     const location = useLocation()
@@ -33,11 +37,26 @@ export default function Dashboard() {
         }
     },[])
 
+    const getContent = (type) => {
+        switch(type){
+            case dialogContent.NEW_CONVERSATION:
+                return <NewConversationDialog/>
+            case dialogContent.DELETE_ACCOUNT:
+                return <DeleteAccountDialog/>
+            case dialogContent.CHANGE_PASSWORD:
+                return <ChangePasswordDialog/>
+        }
+    }
+
     return (
         <StyledContainer>
             {isMobile ? !inConversation && <Conversations/>: <Conversations/>}
             {isMobile ? inConversation && <Chat animate/>:<Chat/>}
-            <NewConversationDialog/>
+            {dialog.show && 
+                <Dialog>
+                    {getContent(dialog.content)}
+                </Dialog>
+            }
         </StyledContainer>
     )
 }
