@@ -17,7 +17,7 @@ export default function Conversations() {
     const conv_id = useMemo(()=>location.pathname.split('/')[2]??-1,[location.pathname])
     const socket = useSocketContext()
     const dispatch = useDispatch()
-    const [data,userId] = useSelector(state => [state.app.conversations,state.app.user._id])
+    const [data,userId,toast] = useSelector(state => [state.app.conversations,state.app.user._id,state.app.toasts.length>0])
     const [search, setSearch] = useState('')
     const [filtered, setFiltered] = useState(data)
 
@@ -25,9 +25,9 @@ export default function Conversations() {
     useEffect(()=>{
         setFiltered(f=>{
             if(search.trim()==='') return data
-            return data.filter(d =>{
+            return data?.filter(d =>{
             for(let i=0;i<d.users.length;++i){
-                if(d.users[i]._id!==userId && d.users[i].name.includes(search.trim())){
+                if(d.users[i]._id!==userId && d.users[i].name.includes(search.trim().toLowerCase())){
                     return true
                 }
             }
@@ -77,7 +77,7 @@ export default function Conversations() {
                 :<StyledEmpty>No Conversation</StyledEmpty> //todo design empty view
             }
             </StyledContainer>
-            <FAB/>
+            <FAB style={{transform:toast?'translateY(-3.5rem)':''}}/>
         </Wrapper>
     )
 }

@@ -13,7 +13,7 @@ import {SocketProvider} from './context/socket-context'
 function App() {
 
   const token = useSelector(state => state.app.user?.token)
-  
+  console.log({token})
   return (
     <div className="App">
       <SocketProvider>

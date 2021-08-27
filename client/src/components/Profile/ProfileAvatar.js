@@ -4,6 +4,7 @@ import Avatar from '../Avatar'
 
 
 const ProfileAvatar = ({isMyProfile,data,onChange}) => {
+    console.log(data)
     return (
         <>
           <StyledLabel htmlFor="profile-img">

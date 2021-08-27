@@ -10,7 +10,8 @@ const initialState = {
     dialog: {
         show:false,
         content: dialogContent.NEW_CONVERSATION
-    }
+    },
+    toasts:[]
 }
 
 const appSlice = createSlice({
@@ -19,7 +20,7 @@ const appSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             let user = action.payload
-            user.img = user.img.startsWith('http')?user.img:SERVER_URL+user.img
+            user.img = user.img?.startsWith('http')?user.img:(user.img && SERVER_URL+user.img)
             const newState = { ...state, user }
             localStorage.setItem('user', JSON.stringify(user))
             return newState
@@ -79,8 +80,21 @@ const appSlice = createSlice({
         },
         logout: (state,action) =>{
             localStorage.removeItem('user')
-            return initialState
-        }
+            return {...initialState,user:null}
+        },
+        showToast: (state,action) =>{
+            return {...state,toasts: [...state.toasts,action.payload]}
+        },
+        hideToast: (state,action)=>{
+            const toasts = [...state.toasts]
+            toasts.shift()
+            return {...state,toasts}
+        },
+        updateProfile: (state,action)=>{
+            const user = {...state.user,...action.payload}
+            localStorage.setItem('user',JSON.stringify(user))
+            return {...state,user}
+        },
     }
 });
 
@@ -92,6 +106,9 @@ export const { setUser,
     showDialog,
     updateProfileImg,
     logout,
-    
+    showToast,
+    hideToast,
+    updateProfile,
+
 } = appSlice.actions
 export default appSlice.reducer

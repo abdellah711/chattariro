@@ -60,7 +60,7 @@ export const search = async (req,res,next) =>{
 export const listUsers = async (req,res,next) =>{
 
     const data = await User.aggregate([
-        {$match:{_id:{$ne:mongoose.Types.ObjectId(req.user.id)}}},
+        {$match:{_id:{$ne:mongoose.Types.ObjectId(req.user.id)},isPrivate:{$ne:true}}},
         {$sample:{size:10}},
         {$project:{password:0,email:0}}
     ]).catch(next)
@@ -69,8 +69,32 @@ export const listUsers = async (req,res,next) =>{
 }
 
 export const deleteAccount = async (req,res,next) =>{
-
+    const {password} = req.body
+    const user = await User.findById(req.user.id).select('password').catch(next)
+    const isCorrect = await bcrypt.compare(password,user.password)
+    if(!isCorrect) return res.status(401).json({success:false,message:'Wrong Password!',field:'password'})
     await User.findByIdAndDelete(req.user.id).catch(next)
+    res.json({success:true})
+}
+
+export const changePassword = async (req,res,next)=>{
+    const {oldPassword,newPassword} = req.body
+    const user = await User.findById(req.user.id).select('password').catch(next)
+    const isCorrect = await bcrypt.compare(oldPassword,user.password)
+    if(!isCorrect) return res.status(401).json({success:false,message:'Wrong Password!',field:'oldPassword'})
+    if(newPassword.length<8) return res.status(403).json({success:false,message:'New Password too short!',field:'newPassword'})
+
+    const hashedPassword = await bcrypt.hash(newPassword,12).catch(next)
+    user.password = hashedPassword
+    await User.findByIdAndUpdate(req.user.id,{password:hashedPassword}).catch(next)
 
     res.json({success:true})
+}
+
+export const changePrivacy = async (req,res,next) =>{
+    const {isPrivate} = req.body
+    
+    await User.findByIdAndUpdate(req.user.id,{isPrivate}).catch(next)
+
+    res.json({success:true,isPrivate})
 }

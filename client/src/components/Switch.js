@@ -2,11 +2,19 @@ import {useState} from 'react'
 import styled from 'styled-components'
 
 
-const Switch = () => {
+const Switch = ({onChange,initialValue = false}) => {
+    const [value, setValue] = useState(initialValue)
+    console.log('value',value)
+    const handleChange = e =>{
+        setValue(v=> !v)
+        onChange(e)
+    }
     return (
         <StyledCheckbox
             type="checkbox"
-            name="switch"/>
+            name="switch"
+            checked={value}
+            onChange={handleChange}/>
     )
 }
 

@@ -41,7 +41,7 @@ const StyledModal = styled.div`
     display:grid;
     place-items: center;
     animation: ${modalAnimation} .3s;
-    z-index: 1000;
+    z-index: 99;
 `
 const showAnimation = keyframes`
         from{

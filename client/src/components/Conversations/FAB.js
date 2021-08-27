@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { showDialog } from '../../features/appSlice'
 import dialogContent from '../../Constants/dialog';
 
-export default function FAB() {
+export default function FAB(props) {
     const dispatch = useDispatch()
 
     const handleClick = () => {
@@ -13,7 +13,7 @@ export default function FAB() {
     }
 
     return (
-        <StyledFab onClick={handleClick}>
+        <StyledFab onClick={handleClick} {...props}>
             <PlusIcon />
         </StyledFab>
     )
@@ -35,4 +35,5 @@ const StyledFab = styled.div`
     padding:.83rem;
     box-shadow: 4px 4px 12px rgba(0,0,0,.4);
     margin:1.2rem 20px;
+    transition: transform .4s;
 `

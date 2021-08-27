@@ -12,11 +12,12 @@ import Dialog from '../components/Dialog'
 import dialogContent from '../Constants/dialog'
 import DeleteAccountDialog from '../components/Profile/DeleteAccountDialog'
 import ChangePasswordDialog from '../components/Profile/ChangePasswordDialog'
+import Toast from '../components/Toast'
 
 export default function Dashboard() {
 
     const dispatch = useDispatch()
-    const dialog = useSelector(state => state.app.dialog)
+    const [dialog,toasts] = useSelector(state => [state.app.dialog,state.app.toasts])
     const socket = useSocketContext()
     const isMobile = useMobile()
     const location = useLocation()
@@ -52,11 +53,12 @@ export default function Dashboard() {
         <StyledContainer>
             {isMobile ? !inConversation && <Conversations/>: <Conversations/>}
             {isMobile ? inConversation && <Chat animate/>:<Chat/>}
-            {dialog.show && 
+            {dialog?.show && 
                 <Dialog>
                     {getContent(dialog.content)}
                 </Dialog>
             }
+            {toasts.length>0 && <Toast toast={toasts[0]}/>}
         </StyledContainer>
     )
 }

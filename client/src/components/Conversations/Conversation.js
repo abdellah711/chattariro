@@ -2,9 +2,9 @@ import styled from 'styled-components'
 import Avatar from '../Avatar'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
+import { SERVER_URL } from '../../Constants/api'
 
 const Conversation = ({selected,item,uId}) =>{
-    console.log('item',item)
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}
     const sender = item.last_msg?.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
     const name = item.is_grp?
@@ -12,8 +12,9 @@ const Conversation = ({selected,item,uId}) =>{
                     :item.users.find(u=>u._id!==uId)?.name
     const read = item.last_msg.read.find(r=>r===uId)!==-1
     const readStyle =  {'--weight':read?'lighter':'bold'}
-    const img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
-    
+    let img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
+    img = img?.startsWith('http:')?img:(img && SERVER_URL+img)
+
     return (
         <StyledConversation style={style} to={`/c/${item._id}`}>
             <Avatar name={name} src={img} style={{'--size':'3.5rem'}}/>

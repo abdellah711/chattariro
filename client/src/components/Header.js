@@ -26,7 +26,7 @@ export default function Header() {
                 {   user?
                     <>
                     <ThemeIcon onClick={()=>setIsDark(!isDark)}/>
-                    <Avatar name={user.user} to={{hash:"#profile",state:{openModal:true}}} src={user.img}/>
+                    <Avatar name={user.name} to={{hash:"#profile",state:{openModal:true}}} src={user.img}/>
                     </>
                 :
                     <>

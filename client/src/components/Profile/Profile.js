@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateProfileImg,logout, showDialog } from '../../features/appSlice'
+import { updateProfileImg,logout, showDialog, updateProfile } from '../../features/appSlice'
 import authFetch from '../../utils/authFetch'
 import { SERVER_URL } from '../../Constants/api'
 import { ReactComponent as BackIcon } from '../../imgs/back-arrow.svg'
@@ -43,17 +43,18 @@ export default function Profile({ location, history }) {
         if (!file) return
         const formData = new FormData()
         formData.append('img', file)
-        const res = await authFetch(`${SERVER_URL}upload`, user.token, 'POST', formData).catch(err => console.error('Error', err))
+        const res = await authFetch(`${SERVER_URL}upload`, user.token, 'POST', formData,'multipart/form-data').catch(err => console.error('Error', err))
         if (res.success) {
             dispatch(updateProfileImg(res.data))
         }
     }
 
     const handlePrivacyChange = async e =>{
-        // const res = await authFetch(SERVER_URL,user?.token,'DELETE');
-        // if(res.success){
-
-        // }
+        console.log(e.target.checked)
+        const res = await authFetch(SERVER_URL+'user/privacy',user?.token,'PUT',{isPrivate:e.target.checked});
+        if(res.success){
+            dispatch(updateProfile({privacy:res.isPrivate}))
+        }
 
     }
 
@@ -74,7 +75,7 @@ export default function Profile({ location, history }) {
                     </StyledAction>
                     <StyledAction>
                         <h3>Private Account</h3>
-                        <Switch onChange={handlePrivacyChange}/>
+                        <Switch initialValue={user?.isPrivate} onChange={handlePrivacyChange}/>
                         <p>No one can create conversation with you</p>
                     </StyledAction>
                 </ActionsContainer>
