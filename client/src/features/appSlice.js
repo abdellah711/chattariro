@@ -20,7 +20,6 @@ const appSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             let user = action.payload
-            user.img = user.img?.startsWith('http')?user.img:(user.img && SERVER_URL+user.img)
             const newState = { ...state, user }
             localStorage.setItem('user', JSON.stringify(user))
             return newState
@@ -68,6 +67,20 @@ const appSlice = createSlice({
                 }
             }
         },
+        seenMessage: (state, action) => {
+            const {conv_id,msg_id,uId} = action.payload
+            const conversations = state.conversations
+            const conv = {...conversations.find(c => c._id === conv_id)}
+            const read = [...conv.read.filter(r=>r.user!==uId),{user:uId,msg:msg_id}]
+            conv.read = read
+            return {
+                ...state,
+                conversations:[
+                    ...conversations.filter(c => c._id!== conv_id),
+                    conv
+                ]
+            }
+        },
         showDialog: (state, action) => {
             return { ...state, dialog: {...state.dialog, ...action.payload} }
         },
@@ -109,6 +122,7 @@ export const { setUser,
     showToast,
     hideToast,
     updateProfile,
+    seenMessage,
 
 } = appSlice.actions
 export default appSlice.reducer

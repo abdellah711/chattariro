@@ -11,7 +11,6 @@ import { useSocketContext } from '../../context/socket-context'
 import {SERVER_URL} from '../../Constants/api'
 import authFetch from '../../utils/authFetch'
 import { useHistory } from 'react-router-dom'
-import Dialog from '../Dialog'
 import SecondButton from '../SecondButton'
 
 const NewConversationDialog = () => {

@@ -7,14 +7,14 @@ import MessageList from './MessageList'
 import { useEffect,useMemo } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useSocketContext } from '../../context/socket-context'
-import { receiveMessages } from '../../features/appSlice'
+import { receiveMessages,seenMessage } from '../../features/appSlice'
 export default function Chat({animate}) {
     
     const location = useLocation()
     const history = useHistory()
     const dispatch = useDispatch()
     const conv_id = useMemo(()=>location.pathname.split('/')[2],[location.pathname])
-    const [conversation,messages,isLoading] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.messages[conv_id],state.app.isLoadingConversation])
+    const [conversation,messages,isLoading,uId] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.messages[conv_id],state.app.isLoadingConversation,state.app.user._id])
     const socket = useSocketContext()
 
     useEffect(() => {
@@ -38,13 +38,22 @@ export default function Chat({animate}) {
         }
     },[isLoading,location.pathname])
 
+    useEffect(()=>{
+        if(!conversation) return
+        const last_msg = conversation.last_msg
+        if(!last_msg.sender !== uId && conversation.read.find(r=>r.user===uId).msg !== last_msg){
+            socket.emit('messages:seen',conversation.last_msg)
+        }
+        dispatch(seenMessage({conv_id,msg_id:last_msg._id,uId}))
+    },[messages])
+
     return (
         <StyledContainer animate={animate}>
             {!(conv_id && conv_id.length)? <NoChat/>
             :
             <ChatContainer>
                 <ProfileNav conv_id={conv_id}/>
-                <MessageList conv_id={conv_id} />
+                <MessageList conversation={conversation} />
                 <ChatForm conv_id={conv_id} />
             </ChatContainer>}
         </StyledContainer>

@@ -4,7 +4,8 @@ import {Server} from 'socket.io'
 import mongoose from 'mongoose'
 import userRoute from './routes/user.js'
 import convRouter from './routes/conversation.js'
-import handler from './handlers/conversation.js'
+import conversationHandler from './handlers/conversation.js'
+import messageHandler from './handlers/message.js'
 import {authIO} from './middlewares/auth.js'
 import upload from './routes/upload.js'
 import cors from 'cors'
@@ -40,10 +41,14 @@ const io = new Server(server,{
 
 const {createConversation,
     listConversations,
+    joinConversation,
+} = conversationHandler(io)
+
+const {
     createMessage,
     listMessages,
-    joinConversation,
-} = handler(io)
+    seenMessage,
+} = messageHandler(io)
 
 io.use(authIO)
 
@@ -55,6 +60,7 @@ io.on('connection',socket=>{
     socket.on('conversation:join',joinConversation)
     socket.on('messages:create',createMessage)
     socket.on('messages:list',listMessages)
+    socket.on('messages:seen',seenMessage)
 })
 
 server.listen(PORT,()=>console.log(`server listening on port ${PORT}`))

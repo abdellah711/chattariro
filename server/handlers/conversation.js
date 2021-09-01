@@ -22,8 +22,8 @@ export default (io) =>({
 
         const msg = await Message.create({sender:ObjectId(socket.user.id),type:"event",content:"started new conversation"}).catch(err=>cb({success:false,message:err.message}))
     
-    
-        let conv = await Conversation.create({is_grp,img,users:usersIds,last_msg:msg._id}).catch(err=>cb({success:false,message:err.message}))
+        const read = usersIds.map(u => ({user:u,msg:null}))
+        let conv = await Conversation.create({is_grp,img,users:usersIds,last_msg:msg._id,read}).catch(err=>cb({success:false,message:err.message}))
         conv = await Conversation.populate(conv,'users')
         
         const newMsg = await Message.findByIdAndUpdate(msg._id,{conv_id:conv._id},{new:true})
@@ -40,18 +40,6 @@ export default (io) =>({
         socket.join([...convs?.map(conv=>conv._id+""),id])
         cb({success:true,data:convs})
     },
-   createMessage: async function(msg,cb){
-       const socket = this
-        const {conv_id,content} = msg
-        const message = await Message.create({conv_id,content,sender:ObjectId(socket.user.id)}).catch(err=>cb({success:false,message:err.message}))
-        const c = await Conversation.findByIdAndUpdate(conv_id,{last_msg:message._id})
-        socket.to(conv_id).emit('receive-message',message)
-        cb({success:true,data:message})
-   },
-   listMessages: async function(conv_id,cb){
-        const messages = await Message.find({conv_id}).catch(err=>cb({success:false,message:err.message}))
-        cb({success:true,data:messages})
-   },
    joinConversation: async function(conv_id){
        const socket = this
        socket.join(conv_id)

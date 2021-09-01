@@ -18,11 +18,12 @@ export default function ProfileNav() {
     const [conversation,uId] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.user._id])
     
     if(!conversation) return <></>
-
-    const name = conversation.users.length>2? 
+    const isGrp = conversation.users.length>2
+    const name = isGrp? 
         conversation.users.map(u=>u.name).join(',')
         : conversation.users.find(u=>u._id!==uId).name
-
+    //todo change this
+    const img = conversation.users.find(u=>u._id!==uId).img
     const handleBackClick = ()=>{
         history.goBack()
         history.replace('/c')
@@ -32,7 +33,7 @@ export default function ProfileNav() {
         <Wrapper>
             { isMobile && <BackIcon onClick={handleBackClick}/>}
             <StyledContainer to={path}>
-                <Avatar name={name} style={{gridRow:'1/3'}}/>
+                <Avatar name={name} src={img} style={{gridRow:'1/3'}}/>
                 <StyledName>{name}</StyledName>
                 <StyledStatus>Online</StyledStatus>
             </StyledContainer>

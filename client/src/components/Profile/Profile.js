@@ -43,14 +43,13 @@ export default function Profile({ location, history }) {
         if (!file) return
         const formData = new FormData()
         formData.append('img', file)
-        const res = await authFetch(`${SERVER_URL}upload`, user.token, 'POST', formData,'multipart/form-data').catch(err => console.error('Error', err))
+        const res = await authFetch(`${SERVER_URL}upload`, user.token, 'POST', formData,false).catch(err => console.error('Error', err))
         if (res.success) {
             dispatch(updateProfileImg(res.data))
         }
     }
 
     const handlePrivacyChange = async e =>{
-        console.log(e.target.checked)
         const res = await authFetch(SERVER_URL+'user/privacy',user?.token,'PUT',{isPrivate:e.target.checked});
         if(res.success){
             dispatch(updateProfile({privacy:res.isPrivate}))

@@ -4,7 +4,7 @@ import Chat from '../components/Chat/Chat'
 import Conversations from '../components/Conversations/Conversations'
 import { useSocketContext } from '../context/socket-context'
 import { useDispatch, useSelector } from 'react-redux'
-import { receiveMessage,createConversation } from '../features/appSlice'
+import { receiveMessage,createConversation, seenMessage } from '../features/appSlice'
 import NewConversationDialog from '../components/Conversations/NewConversationDialog'
 import useMobile from '../hooks/useMobile'
 import { useLocation } from 'react-router'
@@ -31,6 +31,10 @@ export default function Dashboard() {
             console.log('receive conv',conversation)
             dispatch(createConversation({data:conversation}))
             socket.emit('conversation:join',conversation._id)
+        })
+        socket.on('seen-message',(conv_id,user,msg)=>{
+            console.log('receive seen')
+            dispatch(seenMessage({conv_id,msg_id:msg,uId:user}))
         })
         return ()=> {
             socket.off('receive-message')

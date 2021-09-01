@@ -10,10 +10,9 @@ const Conversation = ({selected,item,uId}) =>{
     const name = item.is_grp?
                     item.grp_name?item.grp_name:item.users.map(u=>u.name).join(' ')
                     :item.users.find(u=>u._id!==uId)?.name
-    const read = item.last_msg.read.find(r=>r===uId)!==-1
+    const read = item.read.find(r=>r.user===uId).msg === item.last_msg._id
     const readStyle =  {'--weight':read?'lighter':'bold'}
     let img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
-    img = img?.startsWith('http:')?img:(img && SERVER_URL+img)
 
     return (
         <StyledConversation style={style} to={`/c/${item._id}`}>
@@ -22,7 +21,9 @@ const Conversation = ({selected,item,uId}) =>{
                 <StyledName>{name}</StyledName>
                 <StyledMsg style={readStyle}><span>{sender}: </span>{item.last_msg.content} </StyledMsg>
             </div>
+            {!read && <StyledDot/>}
             <StyledTime>{moment(new Date(item.last_msg.createdAt)).fromNow()}</StyledTime>
+
         </StyledConversation>
     )
 }
@@ -66,6 +67,11 @@ const StyledMsg = styled.p`
 const StyledTime = styled.p`
     color: var(--text-second);
 `
-
+const StyledDot = styled.div`
+    height: 9px;
+    width: 9px;
+    background-color: #88b729;
+    border-radius: 50%;
+`
 
 export default Conversation

@@ -1,7 +1,7 @@
 import styled,{css} from 'styled-components'
 import {Link } from 'react-router-dom'
 import {ReactComponent as CheckedIcon } from '../imgs/check.svg'
-
+import {SERVER_URL} from '../Constants/api'
 
 const containerCss = css`
     height:var(--size,3rem);
@@ -25,7 +25,7 @@ export default function Avatar({src,name,to,style,selected=false,...rest}) {
     return (
         <StyledContainer to={to} style={style} {...rest}>
            {selected? <StyledIcon/>
-           : src ?<StyledImg src={src} />
+           : src ?<StyledImg src={src.startsWith('http')?src: SERVER_URL+src} />
            : <StyledChar>{name&&name[0]?.toUpperCase()}</StyledChar>
            } 
         </StyledContainer>
@@ -37,7 +37,7 @@ const StyledWrapper = styled.div`${containerCss}`
 
 const StyledChar = styled.h1`
     user-select:none;
-    font-size: 1.7em;
+    font-size: var(--font-size,1.7em);
     color: #fff;
 `
 const StyledImg = styled.img`
