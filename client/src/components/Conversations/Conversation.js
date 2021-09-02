@@ -19,7 +19,7 @@ const Conversation = ({selected,item,uId}) =>{
             <Avatar name={name} src={img} style={{'--size':'3.5rem'}}/>
             <div className="conv_data">
                 <StyledName>{name}</StyledName>
-                <StyledMsg style={readStyle}><span>{sender}: </span>{item.last_msg.content} </StyledMsg>
+                <StyledMsg style={readStyle}><span>{sender}: </span>{item.last_msg.type === 'image'?'Photo':item.last_msg.content} </StyledMsg>
             </div>
             {!read && <StyledDot/>}
             <StyledTime>{moment(new Date(item.last_msg.createdAt)).fromNow()}</StyledTime>
@@ -60,6 +60,7 @@ const StyledMsg = styled.p`
    -webkit-box-orient: vertical;
    letter-spacing: .5px;
    font-weight: var(--weight,lighter);
+   overflow-wrap: anywhere;
     span{
         text-transform: capitalize;
     }

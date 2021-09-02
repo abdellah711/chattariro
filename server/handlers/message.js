@@ -7,8 +7,9 @@ const ObjectId = mongoose.Types.ObjectId
 export default io =>({
     createMessage: async function(msg,cb){
         const socket = this
-        const {conv_id,content} = msg
-        const message = await Message.create({conv_id,content,sender:ObjectId(socket.user.id)}).catch(err=>cb({success:false,message:err.message}))
+        const {conv_id,content,type} = msg
+
+        const message = await Message.create({conv_id,content,type,sender:ObjectId(socket.user.id)}).catch(err=>cb({success:false,message:err.message}))
         await Conversation.findByIdAndUpdate(conv_id,{last_msg:message._id})
         socket.to(conv_id).emit('receive-message',message)
         cb({success:true,data:message})

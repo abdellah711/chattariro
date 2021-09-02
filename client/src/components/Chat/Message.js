@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import Avatar from '../Avatar'
+import { SERVER_URL } from '../../Constants/api'
 
 const Message = ({message,userId,sender,users,messageBefore}) =>{
     const isMe = userId === message.sender
@@ -19,16 +20,15 @@ const Message = ({message,userId,sender,users,messageBefore}) =>{
         </Wrapper>)
     }
 
-
-    
-
-
+    const isImage = message.type === 'image'
     return (
         <Wrapper>
             <MsgContainer style={{alignSelf: isMe?'flex-end':'flex-start'}}>
                 {!isMe && !hasSendMsgBefore &&<Avatar name={sender?.name} src={sender?.img}/>}
                 <StyledMessage style={isMe?{}: {backgroundColor:'var(--primary)',color:'var(--onPrimary)',marginLeft:hasSendMsgBefore?'calc(3rem + 7px)':''}}>
-                    <p>{message.content}</p>
+                    {isImage?
+                    <img src={message.content.startsWith('http')?message.content: SERVER_URL+message.content} alt="message" />
+                    :<p>{message.content}</p>}
                 </StyledMessage>
             </MsgContainer>
             {seen.length>0 && <SeenWrapper>{seen}</SeenWrapper>}
@@ -65,12 +65,22 @@ const MsgContainer = styled.div`
 const StyledMessage = styled.div`
     background-color: #4a4a4ab8;
     align-self: center;
-    padding: .5em;
     border-radius: 7px;
     color: #fff;
     font-size:1.05rem;
     letter-spacing: .4px;
-    /* margin-right: 20px; */
+    display:flex;
+    img{
+        max-width:100%;
+        cursor:pointer;
+        border-radius: 12px;
+        height: 15rem;
+        object-fit: cover;
+    }
+    p{
+        overflow-wrap: anywhere;
+        margin: .5em;
+    }
 `
 const SeenWrapper = styled.div`
     display:flex;

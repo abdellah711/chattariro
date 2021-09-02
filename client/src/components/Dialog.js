@@ -54,7 +54,6 @@ const showAnimation = keyframes`
         }
 `
 const StyledDialog = styled.div`
-    /* height: var(--h,80vh); */
     width: var(--w,min(600px,80vw));
     background-color:var(--bg);
     border-radius: 12px;

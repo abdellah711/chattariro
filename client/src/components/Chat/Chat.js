@@ -4,18 +4,23 @@ import {ReactComponent as WelcomeIcon} from '../../imgs/welcome.svg'
 import ChatForm from './ChatForm'
 import ProfileNav from './ProfileNav'
 import MessageList from './MessageList'
-import { useEffect,useMemo } from 'react'
+import { useEffect,useMemo,useState } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useSocketContext } from '../../context/socket-context'
 import { receiveMessages,seenMessage } from '../../features/appSlice'
+import SendImgDialog from './SendImgDialog'
 export default function Chat({animate}) {
     
     const location = useLocation()
     const history = useHistory()
     const dispatch = useDispatch()
     const conv_id = useMemo(()=>location.pathname.split('/')[2],[location.pathname])
-    const [conversation,messages,isLoading,uId] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.messages[conv_id],state.app.isLoadingConversation,state.app.user._id])
+    const [conversation,messages,isLoading,user] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.messages[conv_id],state.app.isLoadingConversation,state.app.user])
+    const [images, setImages] = useState()
+    
     const socket = useSocketContext()
+
+    const uId = user._id
 
     useEffect(() => {
         if(isLoading){
@@ -47,6 +52,11 @@ export default function Chat({animate}) {
         dispatch(seenMessage({conv_id,msg_id:last_msg._id,uId}))
     },[messages])
 
+    const handleImgSelect = e =>{
+        if(e.target.files.length === 0 ) return
+        setImages([...e.target.files])
+    }
+
     return (
         <StyledContainer animate={animate}>
             {!(conv_id && conv_id.length)? <NoChat/>
@@ -54,7 +64,8 @@ export default function Chat({animate}) {
             <ChatContainer>
                 <ProfileNav conv_id={conv_id}/>
                 <MessageList conversation={conversation} />
-                <ChatForm conv_id={conv_id} />
+                {images && <SendImgDialog images={images} setImages={setImages} token={user.token} conv_id={conv_id}/>}
+                <ChatForm conv_id={conv_id} onImgSelect={handleImgSelect}/>
             </ChatContainer>}
         </StyledContainer>
     )
@@ -77,6 +88,7 @@ const ChatContainer = styled.div`
     height:100%;
     display:flex;
     flex-direction:column;
+    position: relative;
 `
 
 //no chat

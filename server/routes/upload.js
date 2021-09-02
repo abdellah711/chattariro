@@ -1,5 +1,5 @@
 import express from 'express'
-import { uploadImg } from '../controllers/upload.js'
+import { uploadImg,uploadMsgs } from '../controllers/upload.js'
 import multer from 'multer'
 import path from 'path'
 import auth from '../middlewares/auth.js'
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage,
-    limits: {fileSize: 5000000}
+    limits: {fileSize: 10000000}
 })
 
 const router = express.Router()
@@ -24,6 +24,12 @@ router.post('/',[
     auth,
     upload.single('img'),
     uploadImg
+])
+
+router.post('/message/:conv_id',[
+    auth,
+    upload.single('img'),
+    uploadMsgs
 ])
 
 export default router
