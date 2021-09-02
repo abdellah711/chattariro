@@ -9,6 +9,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { useSocketContext } from '../../context/socket-context'
 import { receiveMessages,seenMessage } from '../../features/appSlice'
 import SendImgDialog from './SendImgDialog'
+import DropImgDialog from './DropImgDialog'
 export default function Chat({animate}) {
     
     const location = useLocation()
@@ -17,11 +18,10 @@ export default function Chat({animate}) {
     const conv_id = useMemo(()=>location.pathname.split('/')[2],[location.pathname])
     const [conversation,messages,isLoading,user] = useSelector(state => [state.app.conversations?.find(c=>c._id===conv_id),state.app.messages[conv_id],state.app.isLoadingConversation,state.app.user])
     const [images, setImages] = useState()
-    
+    const [showDropContainer, setShowDropContainer] = useState(false)
     const socket = useSocketContext()
 
     const uId = user._id
-
     useEffect(() => {
         if(isLoading){
             return
@@ -56,20 +56,37 @@ export default function Chat({animate}) {
         if(e.target.files.length === 0 ) return
         setImages([...e.target.files])
     }
+    const handleDragEnter = (e,enter = true) =>{
+        e.stopPropagation();
+        e.preventDefault()
+        if(enter === showDropContainer) return
+        if(!e.dataTransfer?.types.includes('Files')) return console.log('no file')
+        setShowDropContainer(enter)
+    }
+    const handleDrop = e =>{
+        e.preventDefault()
+        setShowDropContainer(false)
+        let selectedFiles = [...e.dataTransfer.files].filter(file => file.type.startsWith('image'))
+        selectedFiles = selectedFiles.length === 0?null: selectedFiles
+        setImages(selectedFiles)
 
+    }
     return (
         <StyledContainer animate={animate}>
             {!(conv_id && conv_id.length)? <NoChat/>
             :
-            <ChatContainer>
+            <ChatContainer onDragOver={handleDragEnter}>
                 <ProfileNav conv_id={conv_id}/>
                 <MessageList conversation={conversation} />
                 {images && <SendImgDialog images={images} setImages={setImages} token={user.token} conv_id={conv_id}/>}
+                {showDropContainer && <DropImgDialog onDrop={handleDrop} onDragLeave={e=>handleDragEnter(e,false)}/>}
                 <ChatForm conv_id={conv_id} onImgSelect={handleImgSelect}/>
             </ChatContainer>}
         </StyledContainer>
     )
 }
+
+
 
 const enterAnimation = keyframes`
     from{transform: translate(50vw);opacity:0}
