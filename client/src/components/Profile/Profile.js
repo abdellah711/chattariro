@@ -23,15 +23,14 @@ export default function Profile({ location, history }) {
         noProfile = false
     }
     const dispatch = useDispatch()
+    const conv_id = location.pathname.split('/')[2]
 
-    let [data, user] = useSelector(state => [isMyProfile ? state.app.user : state.app.conversations, state.app.user])
+    let [data, user,messages] = useSelector(state => [isMyProfile ? state.app.user : state.app.conversations, state.app.user,!isMyProfile && state.app.messages && state.app.messages[conv_id]])
     const uId = user?._id
 
     if (noProfile) return <></>
-    const conv_id = location.pathname.split('/')[2]
     if (!isMyProfile) {
         data = data?.find(conv => conv._id === conv_id)
-        console.log(data?.users.filter(u => u._id !== uId))
         data = { name: data?.users?.filter(u => u._id !== uId).map(u => u.name).join(', ') }
     }
 
@@ -56,7 +55,6 @@ export default function Profile({ location, history }) {
         }
 
     }
-
     return (
         <ProfileContainer>
             <ProfileAvatar data={data} isMyProfile={isMyProfile} onChange={handleFileChange}/>
@@ -87,9 +85,9 @@ export default function Profile({ location, history }) {
             {!isMyProfile &&
                 <>
                     <h2 style={{ alignSelf: 'flex-start', paddingInline: '1.2rem' }}>Media</h2>
-                    <MediaList>
-
-                    </MediaList>
+                    <MediaList 
+                        items={messages?.filter(msg => msg.type === 'image')}
+                        />
                 </>
             }
         </ProfileContainer>

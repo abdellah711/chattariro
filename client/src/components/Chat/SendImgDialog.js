@@ -71,7 +71,7 @@ const StyledOverlay = styled.div`
 const StyledDialog = styled.form`
     background-color:var(--bg);
     border-radius: 12px;
-    width: 50%;
+    width: max(50%,350px);
     padding: 12px
 `
 const ImagesContainer = styled.div`

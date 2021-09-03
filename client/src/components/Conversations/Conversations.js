@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 import Search from './Search'
 import {ReactComponent as BackIcon} from '../../imgs/back-arrow.svg'
+import {ReactComponent as EmptyIcon} from '../../imgs/empty.svg'
 
 export default function Conversations() {
     
@@ -74,7 +75,10 @@ export default function Conversations() {
                 <ProgressContainer><Progress/></ProgressContainer>
                 :filtered.length?
                 conversations
-                :<StyledEmpty>No Conversation</StyledEmpty> //todo design empty view
+                :<StyledEmpty>
+                    <EmptyIcon/>
+                    <p>No Conversation</p>
+                </StyledEmpty>
             }
             </StyledContainer>
             <FAB style={{transform:toast?'translateY(-3.5rem)':''}}/>
@@ -111,8 +115,17 @@ const StyledEmpty = styled.div`
     height:100%;
     display:flex;
     align-items: center;
-    font-size:1.1rem;
     user-select:none;
+    flex-direction: column;
+    gap: 1rem;
+    p{
+        font-size:1.1rem;
+        font-weight: bold;
+    }
+    svg{
+        fill:var(--text-color);
+        width: 40%;
+    }
 `
 
 const SearchWrappper = styled.div`

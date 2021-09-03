@@ -62,6 +62,7 @@ const StyledBar = styled.div`
         height: 40px;
         padding:.4rem;
         cursor:pointer;
+        transition: .3s;
     }
     svg:hover{
         background: rgba(99,99,99,.25);

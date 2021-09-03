@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 import Avatar from '../Avatar'
 import { SERVER_URL } from '../../Constants/api'
+import { useState } from 'react'
 
 const Message = ({message,userId,sender,users,messageBefore}) =>{
     const isMe = userId === message.sender
     const hasSendMsgBefore = messageBefore?.sender=== message.sender && messageBefore?.type !== 'event'
-    
+    const [isImageLoaded, setIsImageLoaded] = useState(false)
     const seen = users
         .filter(u=>u.msg === message._id && u.user._id !== userId)
         .map(u =>(<Avatar name={u.user.name} src={u.user.img} style={{'--size':'20px','--font-size':'15px'}}/>))
@@ -27,7 +28,12 @@ const Message = ({message,userId,sender,users,messageBefore}) =>{
                 {!isMe && !hasSendMsgBefore &&<Avatar name={sender?.name} src={sender?.img}/>}
                 <StyledMessage style={isMe?{}: {backgroundColor:'var(--primary)',color:'var(--onPrimary)',marginLeft:hasSendMsgBefore?'calc(3rem + 7px)':''}}>
                     {isImage?
-                    <img src={message.content.startsWith('http')?message.content: SERVER_URL+message.content} alt="message" />
+                    <img   
+                        style={isImageLoaded?{}:{height:'18rem'}} 
+                        src={message.content.startsWith('http')?message.content: SERVER_URL+message.content} 
+                        alt="photo"
+                        onLoad={()=>setIsImageLoaded(true)}
+                         />
                     :<p>{message.content}</p>}
                 </StyledMessage>
             </MsgContainer>
@@ -72,10 +78,10 @@ const StyledMessage = styled.div`
     display:flex;
     img{
         max-width:100%;
+        max-height: 20rem;
         cursor:pointer;
         border-radius: 12px;
-        height: 15rem;
-        object-fit: cover;
+        /* height: 15rem; */
     }
     p{
         overflow-wrap: anywhere;
