@@ -15,7 +15,8 @@ import SecondButton from '../SecondButton'
 
 const NewConversationDialog = () => {
 
-    const token = useSelector(state=>state.app.user.token)
+    const user = useSelector(state=>state.app.user)
+    const token = user?.token
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -27,7 +28,7 @@ const NewConversationDialog = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [users, setUsers] = useState(null)
     const [initialData, setInitialData] = useState(null)
-
+    const [groupName, setGroupName] = useState('')
     useEffect(async ()=>{
         const data = await authFetch(`${SERVER_URL}user`,token)
         setUsers(data.data)
@@ -51,12 +52,16 @@ const NewConversationDialog = () => {
     const handleConversationCreating = () =>{
         setIsLoading(true)
         const newConv = {
-            users: selected.map(u => u._id)
+            users: selected.map(u => u._id),
         }
+        if(selected.length>1){
+            if(groupName!== '') newConv.name = groupName
+            newConv.creator = user._id
+        }
+        console.log(newConv)
         socket.emit('conversation:create', newConv, res => {
             
             setIsLoading(false)
-            console.log(res)
             if (res.success) {
                 dispatch(createConversation(res))
                 setQuery('')
@@ -96,7 +101,7 @@ const NewConversationDialog = () => {
                 <SelectedContainer>
                     {selected.map(s => <SelectedItem key={s._id} contact={s} onDeselect={handleDeselect}/>)}
                 </SelectedContainer>
-
+                {selected.length>1 && <Search value={groupName} onType={e=>setGroupName(e.target.value)} placeholder="Groupe name" type="text"/>}
                 <ButtonsWrapper>
                     <SecondButton onClick={()=>dispatch(showDialog({show:false}))}>Cancel</SecondButton>
                     <PrimaryButton style={{ fontSize: '.95rem' }} onClick={handleConversationCreating} disabled={selected.length===0} loading={isLoading}>start</PrimaryButton>

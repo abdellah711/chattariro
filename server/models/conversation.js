@@ -6,11 +6,12 @@ const readSchema = mongoose.Schema({
 })
 
 const schema = mongoose.Schema({
-    is_grp:{type: Boolean,default: false},
     img: String,
     users: [{type:mongoose.ObjectId,ref:"users"}],
     last_msg: {type:mongoose.ObjectId,ref:'Message',required:true},
-    read:{type:[readSchema]}
+    read:{type:[readSchema]},
+    name:String,
+    creator: String
 },{
     timestamps:true
 })

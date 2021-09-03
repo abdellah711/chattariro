@@ -31,7 +31,7 @@ export default function Profile({ location, history }) {
     if (noProfile) return <></>
     if (!isMyProfile) {
         data = data?.find(conv => conv._id === conv_id)
-        data = { name: data?.users?.filter(u => u._id !== uId).map(u => u.name).join(', ') }
+        data = { name: data.name ?? data?.users?.map(u => u.name).join(', ') }
     }
 
     if (!data) return <></>
@@ -142,6 +142,12 @@ const StyledAction = styled.label`
 const StyledName = styled.p`
     text-transform: capitalize;
     font-size:1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow-wrap: anywhere;
+    text-overflow: ellipsis;
+    overflow: hidden;
 `
 const StyledEmail = styled.p`
     color: var(--text-second);

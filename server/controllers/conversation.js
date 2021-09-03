@@ -11,7 +11,7 @@ export const getConversations = async (req,res,next) =>{
 }
 
 export const newConversation = async (req,res,next) =>{
-        const {is_grp,users,img} = req.body
+        const {users,img} = req.body
 
         if(!users) return res.json({success:false, message:'Please provide conversation members'})
 
@@ -27,7 +27,7 @@ export const newConversation = async (req,res,next) =>{
     
         
     
-        let conv = await Conversation.create({is_grp,img,users:usersIds,last_msg:msg._id}).catch(err=>res.json({success:false,message:err.message}))
+        let conv = await Conversation.create({img,users:usersIds,last_msg:msg._id}).catch(err=>res.json({success:false,message:err.message}))
         conv = await Conversation.populate(conv,'users')
         
         const newMsg = await Message.findByIdAndUpdate(msg._id,{conv_id:conv._id},{new:true})

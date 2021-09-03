@@ -40,6 +40,7 @@ export default function Conversations() {
     useEffect(()=>{
         socket.emit('conversation:list',res=>{
             if(res.success){
+                console.log(res.data)
                 dispatch(setConversations(res.data))
             }else{
                 
@@ -63,6 +64,7 @@ export default function Conversations() {
             }
         });
     },[socket])
+
     const conversations = filtered?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==conv_id}/>)
     return (
         <Wrapper>

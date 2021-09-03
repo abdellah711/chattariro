@@ -34,8 +34,8 @@ const appSlice = createSlice({
         },
         createConversation: (state, action) => {
             const conversation = action.payload.data
-            if(action.payload.exists) return {...state,isDialogShown:false}
-            return { ...state, conversations: [conversation,...state.conversations ],isDialogShown:false }
+            if(action.payload.exists) return {...state,dialog:{show:false,content: dialogContent.NEW_CONVERSATION}}
+            return { ...state, conversations: [conversation,...state.conversations ],dialog:{show:false,content: dialogContent.NEW_CONVERSATION} }
         },
         receiveMessage: (state, action) => {
             const message = action.payload
@@ -69,16 +69,15 @@ const appSlice = createSlice({
         },
         seenMessage: (state, action) => {
             const {conv_id,msg_id,uId} = action.payload
-            const conversations = state.conversations
-            const conv = {...conversations.find(c => c._id === conv_id)}
+            const conversations = [...state.conversations]
+            const convIndex = conversations.findIndex(c => c._id === conv_id)
+            const conv = {...conversations[convIndex]}
             const read = [...conv.read.filter(r=>r.user!==uId),{user:uId,msg:msg_id}]
             conv.read = read
+            conversations[convIndex] = conv
             return {
                 ...state,
-                conversations:[
-                    ...conversations.filter(c => c._id!== conv_id),
-                    conv
-                ]
+                conversations
             }
         },
         showDialog: (state, action) => {

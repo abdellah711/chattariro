@@ -20,10 +20,10 @@ export default function ProfileNav() {
     if(!conversation) return <></>
     const isGrp = conversation.users.length>2
     const name = isGrp? 
-        conversation.users.map(u=>u.name).join(',')
+        conversation.name || conversation.users.map(u=>u.name).join(', ')
         : conversation.users.find(u=>u._id!==uId).name
-    //todo change this
-    const img = conversation.users.find(u=>u._id!==uId).img
+
+    const img = conversation.users.length>2? conversation.img: conversation.users.find(u=>u._id!==uId).img
     const handleBackClick = ()=>{
         history.goBack()
         history.replace('/c')

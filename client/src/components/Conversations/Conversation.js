@@ -7,12 +7,13 @@ import { SERVER_URL } from '../../Constants/api'
 const Conversation = ({selected,item,uId}) =>{
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}
     const sender = item.last_msg?.sender === uId? 'you':item.users.find(u=>u._id===item.last_msg.sender).name
-    const name = item.is_grp?
-                    item.grp_name?item.grp_name:item.users.map(u=>u.name).join(' ')
+    const is_grp = item.users.length > 2
+    const name = is_grp?
+                    item.name?item.name:item.users.map(u=>u.name).join(', ')
                     :item.users.find(u=>u._id!==uId)?.name
     const read = item.read.find(r=>r.user===uId).msg === item.last_msg._id
     const readStyle =  {'--weight':read?'lighter':'bold'}
-    let img = item.is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
+    let img = is_grp?item.img:item.users.find(u=>u._id!==uId)?.img
 
     return (
         <StyledConversation style={style} to={`/c/${item._id}`}>
@@ -45,22 +46,29 @@ const StyledConversation = styled(Link)`
         flex-direction: column;
         gap: .35em;
     }
+
+    p{
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow-wrap: anywhere;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 `
 
 const StyledName = styled.p`
     text-transform: capitalize;
     font-size: 1.1rem;
     font-weight:bold;
+    
+
     `
 const StyledMsg = styled.p`
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: -webkit-box;
-   -webkit-line-clamp: 1;
-   -webkit-box-orient: vertical;
-   letter-spacing: .5px;
-   font-weight: var(--weight,lighter);
-   overflow-wrap: anywhere;
+   
+    letter-spacing: .5px;
+    font-weight: var(--weight,lighter);
+    overflow-wrap: anywhere;
     span{
         text-transform: capitalize;
     }

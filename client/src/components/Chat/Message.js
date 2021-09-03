@@ -9,7 +9,7 @@ const Message = ({message,userId,sender,users,messageBefore}) =>{
     const [isImageLoaded, setIsImageLoaded] = useState(false)
     const seen = users
         .filter(u=>u.msg === message._id && u.user._id !== userId)
-        .map(u =>(<Avatar name={u.user.name} src={u.user.img} style={{'--size':'20px','--font-size':'15px'}}/>))
+        .map(u =>(<Avatar key={u.user._id} name={u.user.name} src={u.user.img} style={{'--size':'20px','--font-size':'15px'}}/>))
     
     if(message.type === 'event'){
         return (

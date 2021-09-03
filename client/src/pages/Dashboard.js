@@ -28,12 +28,10 @@ export default function Dashboard() {
             dispatch(receiveMessage(message))
         })
         socket.on('new-conversation',(conversation)=>{
-            console.log('receive conv',conversation)
             dispatch(createConversation({data:conversation}))
             socket.emit('conversation:join',conversation._id)
         })
         socket.on('seen-message',(conv_id,user,msg)=>{
-            console.log('receive seen')
             dispatch(seenMessage({conv_id,msg_id:msg,uId:user}))
         })
         return ()=> {

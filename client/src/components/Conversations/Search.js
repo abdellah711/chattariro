@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Search = ({value,onType}) => {
+const Search = ({value,onType,...rest}) => {
     return (
         <StyledSearch
             placeholder="Search ..."
@@ -9,6 +9,7 @@ const Search = ({value,onType}) => {
             name="search"
             type="search"
             autoComplete="false"
+            {...rest}
         />
     )
 }

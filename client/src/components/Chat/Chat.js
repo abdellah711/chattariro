@@ -46,6 +46,8 @@ export default function Chat({animate}) {
     useEffect(()=>{
         if(!conversation) return
         const last_msg = conversation.last_msg
+        if(conversation.read.find(r=>r.user===uId).msg === last_msg._id) return
+
         if(!last_msg.sender !== uId && conversation.read.find(r=>r.user===uId).msg !== last_msg){
             socket.emit('messages:seen',conversation.last_msg)
         }

@@ -10,7 +10,7 @@ const ProfileAvatar = ({isMyProfile,data,onChange}) => {
                 <Avatar name={data.name} src={data.img} style={{ '--size': "9rem", fontSize: "3em" }} />
                 {isMyProfile && <IconWrapper><CameraIcon /></IconWrapper>}
             </StyledLabel>
-            <StyledInput type="file" name="img" id="profile-img" accept="image/*" onChange={onChange} />
+            {isMyProfile &&<StyledInput type="file" name="img" id="profile-img" accept="image/*" onChange={onChange} />}
         </>
     )
 }

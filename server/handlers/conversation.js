@@ -8,7 +8,7 @@ const ObjectId = mongoose.Types.ObjectId
 export default (io) =>({
     createConversation: async function(payload,cb){
         const socket = this
-        const {is_grp,users,img} = payload
+        const {users,img,name,creator} = payload
 
         if(!users) return cb({success:false, message:'Please provide conversation members'})
         const usersIds = users.map(u=>ObjectId(u))
@@ -23,7 +23,7 @@ export default (io) =>({
         const msg = await Message.create({sender:ObjectId(socket.user.id),type:"event",content:"started new conversation"}).catch(err=>cb({success:false,message:err.message}))
     
         const read = usersIds.map(u => ({user:u,msg:null}))
-        let conv = await Conversation.create({is_grp,img,users:usersIds,last_msg:msg._id,read}).catch(err=>cb({success:false,message:err.message}))
+        let conv = await Conversation.create({img,users:usersIds,last_msg:msg._id,read,name,creator}).catch(err=>cb({success:false,message:err.message}))
         conv = await Conversation.populate(conv,'users')
         
         const newMsg = await Message.findByIdAndUpdate(msg._id,{conv_id:conv._id},{new:true})
@@ -35,7 +35,7 @@ export default (io) =>({
     listConversations: async function(cb){
         const socket = this
         const {id} = socket.user
-        const convs = await Conversation.find({users:ObjectId(id)},null,{sort:{updatedAt:-1}}).populate('last_msg').populate('users',{password:0}).catch(err=>cb({success:false,message:err.message}))
+        const convs = await Conversation.find({users:ObjectId(id)}).sort({updatedAt:'asc'}).populate('last_msg').populate('users',{password:0}).catch(err=>cb({success:false,message:err.message}))
         //joining conversations
         socket.join([...convs?.map(conv=>conv._id+""),id])
         cb({success:true,data:convs})
