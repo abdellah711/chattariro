@@ -4,7 +4,7 @@ import Chat from '../components/Chat/Chat'
 import Conversations from '../components/Conversations/Conversations'
 import { useSocketContext } from '../context/socket-context'
 import { useDispatch, useSelector } from 'react-redux'
-import { receiveMessage,createConversation, seenMessage } from '../features/appSlice'
+import { receiveMessage,createConversation, seenMessage, updateUserState } from '../features/appSlice'
 import NewConversationDialog from '../components/Conversations/NewConversationDialog'
 import useMobile from '../hooks/useMobile'
 import { useLocation } from 'react-router'
@@ -34,9 +34,15 @@ export default function Dashboard() {
         socket.on('seen-message',(conv_id,user,msg)=>{
             dispatch(seenMessage({conv_id,msg_id:msg,uId:user}))
         })
+        socket.on('user-state-change',(user,isActive)=>{
+            console.log('user connection',user,isActive)
+            dispatch(updateUserState({uId:user,isActive}))
+        })
         return ()=> {
             socket.off('receive-message')
             socket.off('new-conversation')
+            socket.off('seen-message')
+            socket.off('user-state-change')
         }
     },[])
 

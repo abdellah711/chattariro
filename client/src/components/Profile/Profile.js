@@ -26,12 +26,11 @@ export default function Profile({ location, history }) {
     const conv_id = location.pathname.split('/')[2]
 
     let [data, user,messages] = useSelector(state => [isMyProfile ? state.app.user : state.app.conversations, state.app.user,!isMyProfile && state.app.messages && state.app.messages[conv_id]])
-    const uId = user?._id
 
     if (noProfile) return <></>
     if (!isMyProfile) {
         data = data?.find(conv => conv._id === conv_id)
-        data = { name: data.name ?? data?.users?.map(u => u.name).join(', ') }
+        data = { name: data?.name ?? data?.users?.map(u => u.name).join(', ') ,...data}
     }
 
     if (!data) return <></>
@@ -84,7 +83,12 @@ export default function Profile({ location, history }) {
             }
             {!isMyProfile &&
                 <>
-                    <h2 style={{ alignSelf: 'flex-start', paddingInline: '1.2rem' }}>Media</h2>
+                    {data?.users?.length>2 && 
+                        <>
+                            <StyledTitle>Members</StyledTitle>
+                        </>
+                        }
+                    <StyledTitle>Media</StyledTitle>
                     <MediaList 
                         items={messages?.filter(msg => msg.type === 'image')}
                         />
@@ -138,6 +142,10 @@ const StyledAction = styled.label`
         height: 50%;
         transform: rotate(180deg);
     }
+`
+const StyledTitle = styled.h2`
+    align-self: flex-start;
+    padding-inline: 1.2rem;
 `
 const StyledName = styled.p`
     text-transform: capitalize;

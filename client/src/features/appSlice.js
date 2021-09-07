@@ -25,10 +25,17 @@ const appSlice = createSlice({
             return newState
         },
         setConversations: (state, action) => {
+            const usersState = {}
+            action.payload.forEach(conv => {
+                conv.users.forEach(user=>{
+                    usersState[user._id] = user.isActive ?? false
+                })
+            });
             return {
                 ...state,
                 conversations: action.payload,
                 isLoadingConversation: false,
+                usersState
             }
 
         },
@@ -107,6 +114,13 @@ const appSlice = createSlice({
             localStorage.setItem('user',JSON.stringify(user))
             return {...state,user}
         },
+        updateUserState: (state,action) =>{
+            const {uId,isActive} = action.payload
+            return {
+                ...state,
+                usersState:{...state.usersState,[uId]:isActive}
+            }
+        }
     }
 });
 
@@ -122,6 +136,7 @@ export const { setUser,
     hideToast,
     updateProfile,
     seenMessage,
+    updateUserState,
 
 } = appSlice.actions
 export default appSlice.reducer

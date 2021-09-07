@@ -35,7 +35,7 @@ export default (io) =>({
     listConversations: async function(cb){
         const socket = this
         const {id} = socket.user
-        const convs = await Conversation.find({users:ObjectId(id)}).sort({updatedAt:'asc'}).populate('last_msg').populate('users',{password:0}).catch(err=>cb({success:false,message:err.message}))
+        const convs = await Conversation.find({users:ObjectId(id)}).sort({updatedAt:'desc'}).populate('last_msg').populate('users',{password:0}).catch(err=>cb({success:false,message:err.message}))
         //joining conversations
         socket.join([...convs?.map(conv=>conv._id+""),id])
         cb({success:true,data:convs})

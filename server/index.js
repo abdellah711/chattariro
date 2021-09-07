@@ -6,6 +6,7 @@ import userRoute from './routes/user.js'
 import convRouter from './routes/conversation.js'
 import conversationHandler from './handlers/conversation.js'
 import messageHandler from './handlers/message.js'
+import userHandler from './handlers/user.handler.js'
 import {authIO} from './middlewares/auth.js'
 import upload from './routes/upload.js'
 import cors from 'cors'
@@ -50,9 +51,14 @@ const {
     seenMessage,
 } = messageHandler(io)
 
+const {
+    userConnection
+} = userHandler()
+
 io.use(authIO)
 
 io.on('connection',socket=>{
+    userConnection(socket)
     console.log('connection',socket.id)
     
     socket.on('conversation:list',listConversations)
@@ -61,6 +67,9 @@ io.on('connection',socket=>{
     socket.on('messages:create',createMessage)
     socket.on('messages:list',listMessages)
     socket.on('messages:seen',seenMessage)
+    
+    socket.on('disconnect',()=>userConnection(socket,false))
+
 })
 
 server.listen(PORT,()=>console.log(`server listening on port ${PORT}`))
