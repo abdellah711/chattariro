@@ -9,7 +9,7 @@ export const uploadProfilePhoto = async (req,res,next) => {
     await User.findByIdAndUpdate(req.user.id,{img:req.file.path}).catch(next)
     res.json({success:true,data:req.file.path})
 
-    if(prevImg){
+    if(prevImg?.img){
         await unlink('.'+prevImg.img).catch(err=>console.log(err))
     }
 }
@@ -24,7 +24,7 @@ export const uploadGroupPhoto = async (req,res,next) => {
     await conv.save().catch(next)
     res.json({success:true,data:req.file.path})
 
-    if(prevImg){
+    if(prevImg?.img){
         await unlink('.'+prevImg.img).catch(err=>console.log(err))
     }
 }

@@ -9,6 +9,8 @@ import Switch from '../Switch'
 import MediaList from './MediaList'
 import ProfileAvatar from './ProfileAvatar'
 import dialogContent from '../../Constants/dialog'
+import Progress from '../Progress'
+import MembersList from './MembersList'
 
 
 export default function Profile({ location }) {
@@ -30,10 +32,10 @@ export default function Profile({ location }) {
     if (noProfile) return <></>
     if (!isMyProfile) {
         data = data?.find(conv => conv._id === conv_id)
-        data = { name: data?.name ?? data?.users?.map(u => u.name).join(', ') ,...data}
+        data = data && { name: data?.name ?? data?.users?.map(u => u.name).join(', ') ,...data}
     }
-
-    if (!data) return <></>
+    
+    if (!data) return <ProfileContainer><Progress/></ProfileContainer>
     const isGrp = data?.users?.length>2
 
     const handleFileChange = async e => {
@@ -42,7 +44,7 @@ export default function Profile({ location }) {
         if (!file) return
         const formData = new FormData()
         formData.append('img', file)
-        const res = await authFetch(`${SERVER_URL}upload/${isGrp?'profile':'group/'+conv_id}`, user.token, 'POST', formData,false).catch(err => console.error('Error', err))
+        const res = await authFetch(`${SERVER_URL}upload/${!isGrp?'profile':'group/'+conv_id}`, user.token, 'POST', formData,false).catch(err => console.error('Error', err))
         if (res.success) {
             dispatch(updateProfilePhoto({img:res.data,isGrp,conv_id}))
         }else{
@@ -91,6 +93,7 @@ export default function Profile({ location }) {
                     {isGrp && 
                         <>
                             <StyledTitle>Members</StyledTitle>
+                            <MembersList members={data.users}/>
                         </>
                         }
                     <StyledTitle>Media</StyledTitle>
