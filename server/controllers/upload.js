@@ -4,9 +4,24 @@ import Message from '../models/message.js'
 import Conversation from '../models/conversation.js'
 
 
-export const uploadImg = async (req,res,next) => {
+export const uploadProfilePhoto = async (req,res,next) => {
     const prevImg = await User.findById(req.user.id).select('img').catch(next)
     await User.findByIdAndUpdate(req.user.id,{img:req.file.path}).catch(next)
+    res.json({success:true,data:req.file.path})
+
+    if(prevImg){
+        await unlink('.'+prevImg.img).catch(err=>console.log(err))
+    }
+}
+
+export const uploadGroupPhoto = async (req,res,next) => {
+    const conv_id = req.params.conv_id
+    const prevImg = await Conversation.findById(conv_id).select('img').catch(next)
+
+    const conv = await Conversation.findById(conv_id).catch(next)
+    if(conv.creator!== req.user.id) return res.status(401).json({success:false,message:'you are not the creator of this conversation'})
+    conv.img = req.file.path
+    await conv.save().catch(next)
     res.json({success:true,data:req.file.path})
 
     if(prevImg){

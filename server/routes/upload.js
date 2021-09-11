@@ -1,5 +1,5 @@
 import express from 'express'
-import { uploadImg,uploadMsgs } from '../controllers/upload.js'
+import { uploadGroupPhoto,uploadProfilePhoto,uploadMsgs } from '../controllers/upload.js'
 import multer from 'multer'
 import path from 'path'
 import auth from '../middlewares/auth.js'
@@ -20,10 +20,15 @@ const upload = multer({
 
 const router = express.Router()
 
-router.post('/',[
+router.post('/profile',[
     auth,
     upload.single('img'),
-    uploadImg
+    uploadProfilePhoto
+])
+router.post('/group/:conv_id',[
+    auth,
+    upload.single('img'),
+    uploadGroupPhoto
 ])
 
 router.post('/message/:conv_id',[

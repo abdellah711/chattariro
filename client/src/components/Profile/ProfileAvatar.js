@@ -3,14 +3,15 @@ import { ReactComponent as CameraIcon } from '../../imgs/camera.svg'
 import Avatar from '../Avatar'
 
 
-const ProfileAvatar = ({isMyProfile,data,onChange}) => {
+const ProfileAvatar = ({isMyProfile,data,onChange,isGrp,uId}) => {
+    const canUpdatePhoto = isMyProfile || (isGrp && data.creator === uId)
     return (
         <>
           <StyledLabel htmlFor="profile-img">
                 <Avatar name={data.name} src={data.img} style={{ '--size': "9rem", fontSize: "3em" }} />
-                {isMyProfile && <IconWrapper><CameraIcon /></IconWrapper>}
+                {canUpdatePhoto && <IconWrapper><CameraIcon /></IconWrapper>}
             </StyledLabel>
-            {isMyProfile &&<StyledInput type="file" name="img" id="profile-img" accept="image/*" onChange={onChange} />}
+            {canUpdatePhoto &&<StyledInput type="file" name="img" id="profile-img" accept="image/*" onChange={onChange} />}
         </>
     )
 }

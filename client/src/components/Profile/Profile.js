@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateProfileImg,logout, showDialog, updateProfile,showToast } from '../../features/appSlice'
+import { updateProfilePhoto,logout, showDialog, updateProfile,showToast } from '../../features/appSlice'
 import authFetch from '../../utils/authFetch'
 import { SERVER_URL } from '../../Constants/api'
 import { ReactComponent as BackIcon } from '../../imgs/back-arrow.svg'
@@ -11,7 +11,7 @@ import ProfileAvatar from './ProfileAvatar'
 import dialogContent from '../../Constants/dialog'
 
 
-export default function Profile({ location, history }) {
+export default function Profile({ location }) {
 
 
     let isMyProfile = false
@@ -34,6 +34,7 @@ export default function Profile({ location, history }) {
     }
 
     if (!data) return <></>
+    const isGrp = data?.users?.length>2
 
     const handleFileChange = async e => {
 
@@ -41,9 +42,9 @@ export default function Profile({ location, history }) {
         if (!file) return
         const formData = new FormData()
         formData.append('img', file)
-        const res = await authFetch(`${SERVER_URL}upload`, user.token, 'POST', formData,false).catch(err => console.error('Error', err))
+        const res = await authFetch(`${SERVER_URL}upload/${isGrp?'profile':'group/'+conv_id}`, user.token, 'POST', formData,false).catch(err => console.error('Error', err))
         if (res.success) {
-            dispatch(updateProfileImg(res.data))
+            dispatch(updateProfilePhoto({img:res.data,isGrp,conv_id}))
         }else{
             dispatch(showToast({message:res.message}))
         }
@@ -60,7 +61,7 @@ export default function Profile({ location, history }) {
     }
     return (
         <ProfileContainer>
-            <ProfileAvatar data={data} isMyProfile={isMyProfile} onChange={handleFileChange}/>
+            <ProfileAvatar data={data} isMyProfile={isMyProfile} onChange={handleFileChange} uId={user._id} isGrp={isGrp}/>
             <StyledContainer>
                 <StyledName>{data.name}</StyledName>
                 {isMyProfile && <StyledEmail>{data.email}</StyledEmail>}
@@ -87,7 +88,7 @@ export default function Profile({ location, history }) {
             }
             {!isMyProfile &&
                 <>
-                    {data?.users?.length>2 && 
+                    {isGrp && 
                         <>
                             <StyledTitle>Members</StyledTitle>
                         </>

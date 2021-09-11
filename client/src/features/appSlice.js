@@ -90,9 +90,15 @@ const appSlice = createSlice({
         showDialog: (state, action) => {
             return { ...state, dialog: {...state.dialog, ...action.payload} }
         },
-        updateProfileImg: (state,action)=>{
-            let img = action.payload
+        updateProfilePhoto: (state,action)=>{
+            let {img,isGrp,conv_id} = action.payload
             img = img.startsWith('http')?img:SERVER_URL+img
+            if(isGrp){
+                const conversations = [...state.conversations]
+                const index = conversations.findIndex(conv => conv._id === conv_id)
+                conversations[index] = {...conversations[index],img}
+                return {...state,conversations}
+            }
             let user = {...state.user,img}
             localStorage.setItem('user',JSON.stringify(user))
             return {...state,user}
@@ -130,7 +136,7 @@ export const { setUser,
     receiveMessage,
     receiveMessages,
     showDialog,
-    updateProfileImg,
+    updateProfilePhoto,
     logout,
     showToast,
     hideToast,
