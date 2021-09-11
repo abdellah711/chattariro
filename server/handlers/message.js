@@ -14,6 +14,7 @@ export default io =>({
         conv.last_msg = message._id
         const index =conv.read.findIndex(r => r.user.toString() === socket.user.id)
         conv.read[index].msg = message._id
+        conv.updatedAt = Date.now()
         await conv.save()
         socket.to(conv_id).emit('receive-message',message)
         cb({success:true,data:message})

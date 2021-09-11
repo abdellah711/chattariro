@@ -4,7 +4,7 @@ import PrimaryButton from '../PrimaryButton'
 import authFetch from '../../utils/authFetch'
 import { SERVER_URL } from '../../Constants/api'
 import { useDispatch } from 'react-redux'
-import { receiveMessage } from '../../features/appSlice'
+import { receiveMessage, showToast } from '../../features/appSlice'
 import { useSocketContext } from '../../context/socket-context'
 
 const SendImgDialog = ({images,setImages,conv_id,token}) => {
@@ -29,8 +29,12 @@ const SendImgDialog = ({images,setImages,conv_id,token}) => {
                     if(res.success){
                         dispatch(receiveMessage(res.data))
                         setImages(null)
+                    }else{
+                        dispatch(showToast({message:res.message}))
                     }
                 })
+            }else{
+                dispatch(showToast({message:resp.message}))
             }
         });
     }

@@ -59,7 +59,6 @@ io.use(authIO)
 
 io.on('connection',socket=>{
     userConnection(socket)
-    console.log('connection',socket.id)
     
     socket.on('conversation:list',listConversations)
     socket.on('conversation:create',createConversation)

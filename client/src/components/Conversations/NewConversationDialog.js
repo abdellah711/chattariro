@@ -1,12 +1,12 @@
-import { useEffect, useState,useMemo } from 'react'
-import styled, { keyframes } from 'styled-components'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import Avatar from '../Avatar'
 import PrimaryButton from '../PrimaryButton'
 import ContactsList from './ContactsList'
 import Search from './Search'
 import {ReactComponent as Icon} from '../../imgs/plus.svg'
 import { useSelector,useDispatch } from 'react-redux'
-import { showDialog,createConversation } from '../../features/appSlice'
+import { showDialog,createConversation,showToast } from '../../features/appSlice'
 import { useSocketContext } from '../../context/socket-context'
 import {SERVER_URL} from '../../Constants/api'
 import authFetch from '../../utils/authFetch'
@@ -68,7 +68,7 @@ const NewConversationDialog = () => {
                 setSelected([])
                 history.push('/c/'+res.data._id)
             }else{
-                console.error('failed to create conversation')
+                dispatch(showToast({message:res.message}))
             }
         })
     }

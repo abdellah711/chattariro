@@ -10,7 +10,7 @@ export const signin = async (req,res,next) =>{
     const {email, password} = req.body
 
     //validation
-    const user = await User.findOne({email})
+    const user = await User.findOne({email}).catch(next)
 
     if(!user) return res.status(403).json({success:false,field:'email',message:'User doesn\'t exist'})
 
@@ -21,8 +21,7 @@ export const signin = async (req,res,next) =>{
     const data = {id:user._id,user: user.name,email:user.email}
     
     const token = jwt.sign(data,KEY)
-
-    res.status(200).json({success:true,token,data:user})
+    res.status(200).json({success:true,token,data:{...user._doc,password:undefined}})
 }
 
 export const signup = async (req,res,next) =>{
@@ -43,7 +42,7 @@ export const signup = async (req,res,next) =>{
     
     const token = jwt.sign(data,KEY)
 
-    res.status(200).json({success:true,token,data:user})
+    res.status(200).json({success:true,token,data:{...user._doc,password:undefined}})
 }
 
 export const search = async (req,res,next) =>{

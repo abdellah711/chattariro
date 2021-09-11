@@ -7,7 +7,7 @@ import MessageList from './MessageList'
 import { useEffect,useMemo,useState } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useSocketContext } from '../../context/socket-context'
-import { receiveMessages,seenMessage } from '../../features/appSlice'
+import { receiveMessages,seenMessage,showToast } from '../../features/appSlice'
 import SendImgDialog from './SendImgDialog'
 import DropImgDialog from './DropImgDialog'
 export default function Chat({animate}) {
@@ -38,6 +38,8 @@ export default function Chat({animate}) {
                         conv_id,
                         messages:res.data
                     }))
+                }else{
+                    dispatch(showToast({message:res.message}))
                 }
             })
         }

@@ -3,9 +3,7 @@ import { useEffect, useState, useMemo } from 'react'
 import Conversation from './Conversation'
 import Progress from '../Progress'
 import FAB from './FAB'
-import {useSocketContext} from '../../context/socket-context'
-import { useDispatch, useSelector } from 'react-redux'
-import { setConversations } from '../../features/appSlice'
+import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 import Search from './Search'
@@ -16,8 +14,6 @@ export default function Conversations() {
     
     const location = useLocation()
     const conv_id = useMemo(()=>location.pathname.split('/')[2]??-1,[location.pathname])
-    const socket = useSocketContext()
-    const dispatch = useDispatch()
     const [data,userId,toast] = useSelector(state => [state.app.conversations,state.app.user._id,state.app.toasts.length>0])
     const [search, setSearch] = useState('')
     const [filtered, setFiltered] = useState(data)
@@ -38,14 +34,7 @@ export default function Conversations() {
 
 
     useEffect(()=>{
-        socket.emit('conversation:list',res=>{
-            if(res.success){
-                console.log(res.data)
-                dispatch(setConversations(res.data))
-            }else{
-                
-            }
-        })
+        
         moment.locale('en', {
             relativeTime : {
                 future: "in %s",
@@ -63,9 +52,9 @@ export default function Conversations() {
                 yy: "%dy"
             }
         });
-    },[socket])
+    },[])
 
-    const conversations = filtered?.map(item=><Conversation key={item._id} uId={userId} item={item} selected={item._id==conv_id}/>)
+    const conversations = filtered?.map(item=>(<Conversation key={item._id} uId={userId} item={item} selected={item._id===conv_id}/>))
     return (
         <Wrapper>
             <SearchWrappper>

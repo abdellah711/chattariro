@@ -22,11 +22,12 @@ const Message = ({message,userId,sender,users,messageBefore}) =>{
     }
 
     const isImage = message.type === 'image'
+    const messageStyle = isImage?{backgroundColor:'none',marginLeft:(hasSendMsgBefore && !isMe)?'calc(3rem + 7px)':''}:isMe?{}: {backgroundColor:'var(--primary)',marginLeft:hasSendMsgBefore?'calc(3rem + 7px)':''}
     return (
         <Wrapper>
             <MsgContainer style={{alignSelf: isMe?'flex-end':'flex-start'}}>
                 {!isMe && !hasSendMsgBefore &&<Avatar name={sender?.name} src={sender?.img}/>}
-                <StyledMessage style={isMe?{}: {backgroundColor:'var(--primary)',color:'var(--onPrimary)',marginLeft:hasSendMsgBefore?'calc(3rem + 7px)':''}}>
+                <StyledMessage style={messageStyle}>
                     {isImage?
                     <img   
                         style={isImageLoaded?{}:{height:'18rem'}} 
@@ -72,7 +73,7 @@ const StyledMessage = styled.div`
     background-color: #4a4a4ab8;
     align-self: center;
     border-radius: 7px;
-    color: #fff;
+    color: var(--onPrimary);
     font-size:1.05rem;
     letter-spacing: .4px;
     display:flex;

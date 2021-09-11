@@ -1,7 +1,6 @@
 import Avatar from "../Avatar"
 import styled from 'styled-components'
 import Progress from "../Progress"
-import { SERVER_URL } from "../../Constants/api"
 
 const ContactsList = ({contacts,onSelect,selected}) => {
     return (
@@ -29,8 +28,6 @@ const StyledContainer = styled.div`
 `
 
 const ContactItem = ({contact,onClick,selected}) =>{
-    let img = contact.img
-    img = img?.startsWith('http:')?img:(img && SERVER_URL+img)
     return (
         <StyledItem onClick={onClick}>
             <Avatar name={contact.name} src={contact.img} selected={selected}/>

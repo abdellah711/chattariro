@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="App">
-      <SocketProvider token={token} key={token}>
+      <SocketProvider token={token}>
         <Router>
           <Header />
           <Switch>

@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import Avatar from '../Avatar'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
-import { SERVER_URL } from '../../Constants/api'
 
 const Conversation = ({selected,item,uId}) =>{
     const style = selected?{'--conv_bg':'var(--primary20)'}:{}

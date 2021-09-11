@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateProfileImg,logout, showDialog, updateProfile } from '../../features/appSlice'
+import { updateProfileImg,logout, showDialog, updateProfile,showToast } from '../../features/appSlice'
 import authFetch from '../../utils/authFetch'
 import { SERVER_URL } from '../../Constants/api'
 import { ReactComponent as BackIcon } from '../../imgs/back-arrow.svg'
@@ -44,6 +44,8 @@ export default function Profile({ location, history }) {
         const res = await authFetch(`${SERVER_URL}upload`, user.token, 'POST', formData,false).catch(err => console.error('Error', err))
         if (res.success) {
             dispatch(updateProfileImg(res.data))
+        }else{
+            dispatch(showToast({message:res.message}))
         }
     }
 
@@ -51,6 +53,8 @@ export default function Profile({ location, history }) {
         const res = await authFetch(SERVER_URL+'user/privacy',user?.token,'PUT',{isPrivate:e.target.checked});
         if(res.success){
             dispatch(updateProfile({privacy:res.isPrivate}))
+        }else{
+            dispatch(showToast({message:res.message}))
         }
 
     }

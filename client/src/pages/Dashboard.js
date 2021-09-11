@@ -4,7 +4,7 @@ import Chat from '../components/Chat/Chat'
 import Conversations from '../components/Conversations/Conversations'
 import { useSocketContext } from '../context/socket-context'
 import { useDispatch, useSelector } from 'react-redux'
-import { receiveMessage,createConversation, seenMessage, updateUserState } from '../features/appSlice'
+import { receiveMessage,createConversation, seenMessage, updateUserState,setConversations,showToast } from '../features/appSlice'
 import NewConversationDialog from '../components/Conversations/NewConversationDialog'
 import useMobile from '../hooks/useMobile'
 import { useLocation } from 'react-router'
@@ -24,6 +24,15 @@ export default function Dashboard() {
     const inConversation = location.pathname.split('/')[2]
 
     useEffect(()=>{
+        socket.emit('conversation:list',res=>{
+            if(res.success){
+                console.log(res.data.map(conv=>conv.last_msg.createdAt))
+                dispatch(setConversations(res.data))
+            }else{
+                dispatch(showToast({message:res.message}))
+            }
+        })
+
         socket.on('receive-message',(message)=>{
             dispatch(receiveMessage(message))
         })

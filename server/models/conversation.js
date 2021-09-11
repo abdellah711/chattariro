@@ -11,9 +11,10 @@ const schema = mongoose.Schema({
     last_msg: {type:mongoose.ObjectId,ref:'Message',required:true},
     read:{type:[readSchema]},
     name:String,
-    creator: String
+    creator: String,
+    updatedAt: {type:Date, default: Date.now()}
 },{
-    timestamps:true
+    timestamps:false
 })
 
 export default mongoose.model('Conversation', schema)
