@@ -19,7 +19,9 @@ export default function (req,res,next){
 
 export const authIO = (socket,next)=>{
     const token = socket.handshake.auth.token
-    if(!token) return next(new Error('Unauthorized'))
+    // if(!token){
+    //     socket.emit('logout')
+    // }
 
     if(!jwt.verify(token,KEY)) return next(new Error('Invalid Token'))
 
@@ -27,5 +29,6 @@ export const authIO = (socket,next)=>{
 
     socket.user = {id,name:user}
     
+
     next()
 }

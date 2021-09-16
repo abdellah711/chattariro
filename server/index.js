@@ -36,6 +36,11 @@ app.use('/user',userRoute)
 app.use('/conversations',convRouter)
 app.use('/upload',upload)
 
+app.use((err,req,res,next)=>{
+    if(!err.statusCode) err.statusCode = 500
+    res.status(err.statusCode).json({success:false,message:'Something failed!',error:err})
+})
+
 const io = new Server(server,{
     cors:['http://localhost:5000/']
 })
